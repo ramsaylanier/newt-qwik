@@ -12,6 +12,15 @@ interface Page {
   _key: string;
   title: string;
   content: any;
+  ownerId: string;
+}
+
+interface PageEdge {
+  _id: string;
+  _key: string;
+  _from: string;
+  _to: string;
+  target: Page;
 }
 
 interface LayoutData {

@@ -1,13 +1,19 @@
 .page{
   position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "body"
+  ;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
 }  
 
-.page header{
+.page > header{
+  grid-area: header;
   background: var(--lighter-green);
-}
-
-.page-content{
-  padding: 1rem 4rem;
 }
 
 .page-title{
@@ -15,3 +21,24 @@
   margin: 0;
   padding: 2rem;
 } 
+
+.page-content{
+  grid-area: body;
+  display: grid;
+  grid-template-areas: 
+    "editor links"
+  ;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 300px;
+}
+
+.page-editor{
+  grid-area: editor;
+  padding: 1rem 4rem;
+}
+
+.page-links{
+  height: 100%;
+  border-left: 3px solid var(--light-purple);
+  grid-area: links;
+}

@@ -5,6 +5,7 @@ import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import ImageTool from "@editorjs/simple-image";
 import Hyperlink from "editorjs-hyperlink";
+import PageLinks from "~/components/page-links/page-links";
 
 export default component$(({ page }: PageProps) => {
   useStyles$(styles);
@@ -32,7 +33,7 @@ export default component$(({ page }: PageProps) => {
         },
         onChange: async () => {
           const update = await editor.save();
-          await fetch("../page/update", {
+          await fetch("../page/api/update", {
             method: "POST",
             body: JSON.stringify({ id: page._id, update }),
           });
@@ -43,14 +44,19 @@ export default component$(({ page }: PageProps) => {
   );
 
   return (
-    <section class="page">
+    <>
       <header>
         <h2 class="page-title">{page.title}</h2>
       </header>
 
       <div class="page-content">
-        <div id="js-editor-holder" />
+        <section class="page-editor">
+          <div id="js-editor-holder" />
+        </section>
+        <aside class="page-links">
+          <PageLinks page={page} />
+        </aside>
       </div>
-    </section>
+    </>
   );
 });

@@ -84,18 +84,30 @@ export const getPage = async (pageKey: string, user: UserProfile) => {
   }
 };
 
-export const uploadFile = async (file: File) => {
+export const getPageLinks = async (page: Page) => {
   try {
-    console.log({ file });
-    const collection = db.collection("Images");
-
-    const query = await db.query(aql`
-      INSERT ${file} into ${collection}
+    console.log({ page });
+    const collection = await db.collection("PageEdges");
+    const filter = `FILTER edge._to == ${page._id}`;
+    const cursor = await db.query(aql`
+      FOR edge IN ${collection}
+      FILTER edge._to == ${page._id}
+        FOR page IN Pages FILTER page._id == edge._from
+        RETURN {edge, page}
     `);
-    const result = query.next();
 
-    console.log(result);
-  } catch (err) {}
+    const result = await cursor.all();
+    return result
+      .filter((r) => {
+        return r.page.ownerId === page.ownerId || !r.page.private;
+      })
+      .map((r) => {
+        r.edge.target = r.page;
+        return r.edge;
+      });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 // export const makeDb = async () => {

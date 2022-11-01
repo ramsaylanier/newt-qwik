@@ -9,9 +9,9 @@ export default component$(() => {
     <>
       <main>
         <Sidebar />
-        <div class="page">
+        <section class="page">
           <Slot />
-        </div>
+        </section>
       </main>
     </>
   );

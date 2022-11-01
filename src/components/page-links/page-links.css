@@ -1,0 +1,27 @@
+.container > header{
+  padding: 1rem;
+  background-color: var(--light-purple);
+}
+
+.container .title{
+  margin: 0;
+}
+
+  
+ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li{
+  list-style: none;
+  border-bottom: 1px solid var(--light-purple);
+} 
+
+a{
+  display: block;
+  width: 100%;
+  padding: .5rem;
+  text-decoration: none;
+} 
