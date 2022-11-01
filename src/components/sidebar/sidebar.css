@@ -1,0 +1,6 @@
+aside{
+  background: var(--light-green);
+  height: 100vh;
+  width: 200px;
+  padding-top: .25rem;
+}

@@ -1,0 +1,17 @@
+main{
+  display: grid;
+  grid-template-areas: 
+    "sidebar page"
+  ;
+  grid-template-rows: 1fr;
+  grid-template-columns: 200px 1fr;
+}
+
+main > aside {
+  grid-area: sidebar;
+}
+
+.page{
+  grid-area: page;
+}
+

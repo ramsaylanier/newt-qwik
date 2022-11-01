@@ -1,0 +1,17 @@
+/**
+ * WHAT IS THIS FILE?
+ *
+ * Globally applied styles. No matter which components are in the page or matching route,
+ * the styles in here will be applied to the Document, without any sort of CSS scoping.
+ *
+ */
+
+:root {
+  --light-green: #64e664;
+  --lighter-green: #c1f9c1;
+  --dark-green:#0a670a;
+  --light-purple: #e3a2ff;
+  --dark-purple: #8b088b;
+
+  --mono-font: Menlo, monospace;
+}
