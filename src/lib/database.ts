@@ -1,6 +1,7 @@
 import { Database, aql } from "arangojs";
 import { literal } from "arangojs/aql";
 import { File } from "arangojs/foxx-manifest";
+import { load } from "cheerio";
 
 const host = import.meta.env.VITE_DATABASE_HOST;
 const databaseName = import.meta.env.VITE_DATABASE_NAME;
@@ -30,10 +31,73 @@ export const updatePageContent = async ({
       lastEdited: new Date(),
     });
     const newDocument = await collection.document(updatedDoc);
+
+    updatePageLinks(update, id);
+
     return newDocument;
   } catch (err) {
     console.log(err);
   }
+};
+
+export const updatePageLinks = async (
+  pageContent: PageContent,
+  pageId: string
+) => {
+  const contentLinks: any = {};
+
+  // get links from blocks
+  pageContent.blocks.forEach((block: any) => {
+    const text = block.data?.text;
+
+    if (text) {
+      const dom = load(text);
+      dom("a").each((_, element) => {
+        const pageKey = dom(element).data("page-key") as string;
+        if (pageKey) {
+          if (contentLinks[pageKey]) {
+            contentLinks[pageKey].push(block.id);
+          } else {
+            contentLinks[pageKey] = [block.id];
+          }
+        }
+      });
+    }
+  });
+
+  // update existing edges, remove old ones
+  const edgeCollection = await db.collection("PageEdges");
+  const { edges } = await edgeCollection.outEdges(pageId, {});
+  console.log({ edges });
+  edges.forEach((edge) => {
+    console.log({ edge });
+    const contentLink = contentLinks[edge._to];
+    if (contentLink) {
+      console.log({ contentLink });
+      edgeCollection.update(edge._key, {
+        blockKeys: contentLink,
+      });
+
+      delete contentLinks[edge._to];
+    } else {
+      edgeCollection.remove(edge._id);
+    }
+  });
+
+  // create new edges
+  Object.keys(contentLinks).forEach((key) => {
+    console.log({ key });
+    const blockKeys = contentLinks[key];
+    try {
+      edgeCollection.save({
+        _from: pageId,
+        _to: `Pages/${key}`,
+        blockKeys,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  });
 };
 
 export const getUserPages = async (userId: string) => {
@@ -59,6 +123,37 @@ export const getUserPages = async (userId: string) => {
     } catch (e) {
       console.log(e);
     }
+  }
+};
+
+export const searchPages = async (queryString: string) => {
+  try {
+    console.log({ queryString });
+    const collection = db.view("pageSearch");
+    const filter = literal(`FILTER page.title LIKE '%${queryString}%'`);
+    const query = await db.query(aql`
+        FOR page IN ${collection} 
+        ${filter}
+        SORT page.lastEdited DESC
+        RETURN page
+      `);
+
+    const pages: any[] = [];
+    for await (const page of query) {
+      pages.push({
+        href: `/page/${page._key}`,
+        name: page.title,
+        description: "",
+        pageKey: page._key,
+      });
+    }
+
+    return {
+      success: true,
+      items: pages,
+    };
+  } catch (err) {
+    console.log(err);
   }
 };
 

@@ -1,6 +1,7 @@
 declare module "@editorjs/list";
 declare module "@editorjs/image";
 declare module "@editorjs/simple-image";
+declare module "@editorjs/link-autocomplete";
 declare module "editorjs-hyperlink";
 
 interface UserProfile {
@@ -11,8 +12,14 @@ interface Page {
   _id: string;
   _key: string;
   title: string;
-  content: any;
+  content: PageContent;
   ownerId: string;
+}
+
+interface PageContent {
+  time: number;
+  blocks: any[];
+  version: string;
 }
 
 interface PageEdge {

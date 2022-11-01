@@ -4,8 +4,9 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import ImageTool from "@editorjs/simple-image";
-import Hyperlink from "editorjs-hyperlink";
+// import Hyperlink from "editorjs-hyperlink";
 import PageLinks from "~/components/page-links/page-links";
+import LinkAutocomplete from "@editorjs/link-autocomplete";
 
 export default component$(({ page }: PageProps) => {
   useStyles$(styles);
@@ -13,25 +14,42 @@ export default component$(({ page }: PageProps) => {
   useClientEffect$(
     () => {
       const editor = new EditorJS({
+        autofocus: true,
         holder: "js-editor-holder",
         data: page.content,
         tools: {
           header: Header,
-          list: List,
-          image: ImageTool,
-          hyperlink: {
-            class: Hyperlink,
+          list: {
+            class: List,
+            inlineToolbar: false,
+          },
+          image: {
+            class: ImageTool,
+            inlineToolbar: false,
+          },
+          link: {
+            class: LinkAutocomplete,
             config: {
-              shortcut: "CMD+L",
-              target: "_blank",
-              rel: "nofollow",
-              availableTargets: ["_blank", "_self"],
-              availableRels: ["author", "noreferrer"],
-              validate: false,
+              endpoint: `${window.location.origin}/page/api/search`,
+              queryParam: "search",
             },
           },
         },
-        onChange: async () => {
+        //   hyperlink: {
+        //     class: Hyperlink,
+        //     config: {
+        //       inlineToolbar: false,
+        //       shortcut: "CMD+L",
+        //       target: "_blank",
+        //       rel: "nofollow",
+        //       availableTargets: ["_blank", "_self"],
+        //       availableRels: ["author", "noreferrer"],
+        //       validate: false,
+        //     },
+        //   },
+        // },
+        onChange: async (api, event) => {
+          console.log({ api, event });
           const update = await editor.save();
           await fetch("../page/api/update", {
             method: "POST",
