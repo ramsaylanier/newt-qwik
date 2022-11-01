@@ -5,7 +5,7 @@ import {
   Resource,
   useResource$,
 } from "@builder.io/qwik";
-import styles from "./sidebar.css";
+import styles from "./sidebar.css?inline";
 import auth0Client from "~/lib/authClient";
 import PageList from "~/components/page-list/page-list";
 import { getCurrentUser } from "~/routes/auth/[...auth0]";

@@ -8,10 +8,14 @@ main{
 }
 
 main > aside {
+  position: relative;
+  z-index: 10;
   grid-area: sidebar;
 }
 
 .page{
+  position: relative;
+  z-index: 5;
   grid-area: page;
 }
 

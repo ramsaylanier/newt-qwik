@@ -1,5 +1,6 @@
 import { Database, aql } from "arangojs";
 import { literal } from "arangojs/aql";
+import { File } from "arangojs/foxx-manifest";
 
 const host = import.meta.env.VITE_DATABASE_HOST;
 const databaseName = import.meta.env.VITE_DATABASE_NAME;
@@ -81,6 +82,20 @@ export const getPage = async (pageKey: string, user: UserProfile) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+export const uploadFile = async (file: File) => {
+  try {
+    console.log({ file });
+    const collection = db.collection("Images");
+
+    const query = await db.query(aql`
+      INSERT ${file} into ${collection}
+    `);
+    const result = query.next();
+
+    console.log(result);
+  } catch (err) {}
 };
 
 // export const makeDb = async () => {

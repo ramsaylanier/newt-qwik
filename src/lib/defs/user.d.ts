@@ -1,4 +1,7 @@
 declare module "@editorjs/list";
+declare module "@editorjs/image";
+declare module "@editorjs/simple-image";
+declare module "editorjs-hyperlink";
 
 interface UserProfile {
   sub: string;
