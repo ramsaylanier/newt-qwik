@@ -26,6 +26,7 @@
     "@builder.io/qwik-react": "0.1.1",
     "@editorjs/image": "^2.6.2",
     "@editorjs/link-autocomplete": "^0.0.0",
+    "@editorjs/marker": "^1.2.2",
     "@editorjs/simple-image": "^1.4.1",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
@@ -52,9 +53,11 @@
     "vite-tsconfig-paths": "3.5.0"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.3.6",
     "@editorjs/editorjs": "^2.25.0",
     "@editorjs/header": "^2.6.2",
     "@editorjs/list": "^1.7.0",
+    "@mui/icons-material": "^5.10.9",
     "arangojs": "^8.0.0",
     "auth0": "^2.44.0",
     "auth0-js": "^9.19.1",

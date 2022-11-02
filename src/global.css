@@ -14,4 +14,10 @@
   --dark-purple: #8b088b;
 
   --mono-font: Menlo, monospace;
+
+  --header-height: 90px;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
 }

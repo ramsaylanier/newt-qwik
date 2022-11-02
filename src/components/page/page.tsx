@@ -4,7 +4,7 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import ImageTool from "@editorjs/simple-image";
-// import Hyperlink from "editorjs-hyperlink";
+import MarkerTool from "@editorjs/marker";
 import PageLinks from "~/components/page-links/page-links";
 import LinkAutocomplete from "@editorjs/link-autocomplete";
 
@@ -34,20 +34,11 @@ export default component$(({ page }: PageProps) => {
               queryParam: "search",
             },
           },
+          marker: {
+            class: MarkerTool,
+            shortcut: "CMD+SHIFT+M",
+          },
         },
-        //   hyperlink: {
-        //     class: Hyperlink,
-        //     config: {
-        //       inlineToolbar: false,
-        //       shortcut: "CMD+L",
-        //       target: "_blank",
-        //       rel: "nofollow",
-        //       availableTargets: ["_blank", "_self"],
-        //       availableRels: ["author", "noreferrer"],
-        //       validate: false,
-        //     },
-        //   },
-        // },
         onChange: async (api, event) => {
           console.log({ api, event });
           const update = await editor.save();

@@ -1,14 +1,24 @@
 import { updatePageContent } from "~/lib/database";
 import type { RequestHandler } from "@builder.io/qwik-city";
-import { getPageLinks, searchPages } from "~/lib/database";
+import { getPageLinks, searchPages, createPage } from "~/lib/database";
 
 export const onPost: RequestHandler = async ({ params, request }) => {
-  console.log({ params });
+  if (params.api === "create") {
+    const { title } = await request.json();
+
+    try {
+      const newPage = await createPage({
+        title,
+      });
+
+      return newPage;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   if (params.api === "update") {
     const { id, update } = await request.json();
-
-    console.log({ update });
 
     try {
       const updatedPageContent = await updatePageContent({

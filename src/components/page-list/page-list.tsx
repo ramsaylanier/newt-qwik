@@ -3,23 +3,28 @@ import {
   useResource$,
   useStyles$,
   Resource,
+  useContext,
 } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import { getUserPages } from "~/lib/database";
-import { getCurrentUser } from "~/routes/auth/[...auth0]";
 import styles from "./page-list.css?inline";
+import { Auth0Context } from "~/lib/auth";
 
 export default component$(() => {
   useStyles$(styles);
+  const store = useContext(Auth0Context);
 
-  const pages = useResource$(async () => {
-    const user = await getCurrentUser();
-    return user ? getUserPages(user?.sub) : [];
+  const pagesResource = useResource$<Page[]>(async ({ track, cleanup }) => {
+    track(() => store.pages.length);
+    const controller = new AbortController();
+    cleanup(() => controller.abort());
+
+    return getUserPages(store.user?.sub);
   });
 
   return (
     <Resource
-      value={pages}
+      value={pagesResource}
       onResolved={(data) => {
         return (
           <>

@@ -1,7 +1,7 @@
 import { Database, aql } from "arangojs";
 import { literal } from "arangojs/aql";
-import { File } from "arangojs/foxx-manifest";
 import { load } from "cheerio";
+import { getCurrentUser } from "~/routes/auth/[...auth0]";
 
 const host = import.meta.env.VITE_DATABASE_HOST;
 const databaseName = import.meta.env.VITE_DATABASE_NAME;
@@ -14,6 +14,23 @@ export const db = new Database({
   databaseName,
   auth: { username, password },
 });
+
+export const createPage = async ({ title }: { title: string }) => {
+  const collection = db.collection("Pages");
+  const user = getCurrentUser();
+  if (!user) return;
+  try {
+    const newPage = await collection.save({
+      title: title,
+      lastEdited: new Date(),
+      ownerId: user.sub,
+      private: true,
+    });
+    return await collection.document(newPage);
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 export const updatePageContent = async ({
   id,
@@ -100,7 +117,7 @@ export const updatePageLinks = async (
   });
 };
 
-export const getUserPages = async (userId: string) => {
+export const getUserPages = async (userId?: string) => {
   if (userId) {
     try {
       const collection = db.view("pageSearch");
@@ -124,6 +141,8 @@ export const getUserPages = async (userId: string) => {
       console.log(e);
     }
   }
+
+  return [];
 };
 
 export const searchPages = async (queryString: string) => {

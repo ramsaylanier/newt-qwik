@@ -6,20 +6,22 @@ import {
   Slot,
 } from "@builder.io/qwik";
 
-interface User {
-  sub: string;
-}
-
 interface AuthProps {
-  user?: User;
+  user?: UserProfile | null;
+  pages: Page[];
   loading: boolean;
 }
 
 export const Auth0Context = createContext<AuthProps>("auth0-context");
 export const Auth0Provider = component$(() => {
-  const state = useStore({
-    loading: false,
-  });
+  const state = useStore(
+    {
+      user: null,
+      pages: [],
+      loading: false,
+    },
+    { recursive: true }
+  );
   useContextProvider(Auth0Context, state);
   return <Slot name="children" />;
 });

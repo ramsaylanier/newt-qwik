@@ -7,7 +7,7 @@ const clientSecret = import.meta.env.VITE_AUTH0_CLIENT_SECRET;
 let currentUser: UserProfile | null;
 
 export const getCurrentUser = () => {
-  return currentUser;
+  return currentUser || null;
 };
 
 const getToken = async ({ accessCode }: { accessCode: string }) => {
