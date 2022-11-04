@@ -40,7 +40,6 @@ export default component$(() => {
 
     if (res.ok && userStore.user) {
       const newPage = await res.json();
-      console.log(newPage);
       userStore.pages.push(newPage);
       store.open = false;
     }

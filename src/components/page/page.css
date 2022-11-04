@@ -13,7 +13,7 @@
 
 .page > header{
   grid-area: header;
-  border-bottom: 3px solid var(--light-purple);
+  border-bottom: 3px solid var(--dark-purple);
   display: flex;
   align-items: center;
 }

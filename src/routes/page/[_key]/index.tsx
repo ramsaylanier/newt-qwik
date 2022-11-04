@@ -2,24 +2,22 @@ import { component$, Resource } from "@builder.io/qwik";
 import { useEndpoint } from "@builder.io/qwik-city";
 import type { RequestHandler } from "@builder.io/qwik-city";
 import { getPage } from "~/lib/database";
-import { getCurrentUser } from "~/routes/auth/[...auth0]";
 import Page from "~/components/page/page";
 
-export const onGet: RequestHandler<Page> = async ({ params, response }) => {
+export const onGet: RequestHandler = async ({ params, cookie }) => {
   try {
-    const user = getCurrentUser();
-
-    if (!user) {
-      throw Error("No user!");
-    }
-
-    const page = await getPage(params._key, user);
-    if (page) {
-      return page;
+    const userCookie = cookie.get("newt-user");
+    console.log({ userCookie });
+    if (userCookie) {
+      const page = await getPage(params._key, userCookie.value);
+      console.log({ page });
+      if (page) {
+        return page;
+      }
     }
   } catch (err) {
     console.log({ err });
-    throw response.redirect("/");
+    return null;
   }
 };
 
@@ -30,7 +28,9 @@ export default component$(() => {
     <Resource
       value={page}
       onResolved={(page) => {
-        return <Page key={page._key} page={page} />;
+        console.log({ page });
+
+        return <>{page && <Page key={page._key} page={page} />}</>;
       }}
     />
   );

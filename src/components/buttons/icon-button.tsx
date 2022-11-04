@@ -5,7 +5,6 @@ import styles from "./buttons.css";
 interface IconButtonProps {
   onClick$: PropFunction<() => void>;
   classNames?: string;
-  style?: any;
 }
 
 export default component$((props: IconButtonProps) => {
@@ -16,7 +15,6 @@ export default component$((props: IconButtonProps) => {
       class={`base-button newt-icon-button ${
         props.classNames ? props.classNames : ""
       }`}
-      style={props.style}
       onClick$={props.onClick$}
     >
       <Slot />

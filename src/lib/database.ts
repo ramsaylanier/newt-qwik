@@ -32,6 +32,23 @@ export const createPage = async ({ title }: { title: string }) => {
   }
 };
 
+export const deletePage = async (pageId: string, userId: string) => {
+  if (!userId) return;
+  const collection = db.collection("Pages");
+  try {
+    const document = await collection.document(pageId);
+
+    if (document.ownerId !== userId) {
+      throw Error("You aren't the owner");
+    }
+
+    collection.remove(document._key);
+    return pageId;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const updatePageContent = async ({
   id,
   update,
@@ -85,12 +102,9 @@ export const updatePageLinks = async (
   // update existing edges, remove old ones
   const edgeCollection = await db.collection("PageEdges");
   const { edges } = await edgeCollection.outEdges(pageId, {});
-  console.log({ edges });
   edges.forEach((edge) => {
-    console.log({ edge });
     const contentLink = contentLinks[edge._to];
     if (contentLink) {
-      console.log({ contentLink });
       edgeCollection.update(edge._key, {
         blockKeys: contentLink,
       });
@@ -103,7 +117,6 @@ export const updatePageLinks = async (
 
   // create new edges
   Object.keys(contentLinks).forEach((key) => {
-    console.log({ key });
     const blockKeys = contentLinks[key];
     try {
       edgeCollection.save({
@@ -147,7 +160,6 @@ export const getUserPages = async (userId?: string) => {
 
 export const searchPages = async (queryString: string) => {
   try {
-    console.log({ queryString });
     const collection = db.view("pageSearch");
     const filter = literal(`FILTER page.title LIKE '%${queryString}%'`);
     const query = await db.query(aql`
@@ -176,7 +188,7 @@ export const searchPages = async (queryString: string) => {
   }
 };
 
-export const getPage = async (pageKey: string, user: UserProfile) => {
+export const getPage = async (pageKey: string, userId: string) => {
   try {
     const collection = db.collection("Pages");
     const filter = `FILTER page._key == '${pageKey}'`;
@@ -188,7 +200,7 @@ export const getPage = async (pageKey: string, user: UserProfile) => {
 
     const result = await cursor.next();
 
-    if (!result.private || result.ownerId === user.sub) {
+    if (!result.private || result.ownerId === userId) {
       return result;
     } else {
       throw Error("No access");
@@ -200,9 +212,7 @@ export const getPage = async (pageKey: string, user: UserProfile) => {
 
 export const getPageLinks = async (page: Page) => {
   try {
-    console.log({ page });
     const collection = await db.collection("PageEdges");
-    const filter = `FILTER edge._to == ${page._id}`;
     const cursor = await db.query(aql`
       FOR edge IN ${collection}
       FILTER edge._to == ${page._id}
@@ -211,6 +221,8 @@ export const getPageLinks = async (page: Page) => {
     `);
 
     const result = await cursor.all();
+    console.log({ result });
+
     return result
       .filter((r) => {
         return r.page.ownerId === page.ownerId || !r.page.private;

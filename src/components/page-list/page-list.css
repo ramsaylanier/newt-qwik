@@ -2,13 +2,14 @@
   padding: 1rem 0;
   margin: 0;
   background-color: var(--light-green);
+  height: 100%;
 }
 
 .page-list-item{
   position: relative;
   display: block;
   width: 100%;
-  border: 1px solid var(--dark-green);
+  border: 2px solid var(--dark-green);
   margin-bottom: .7rem;
   list-style: none;
   background: var(--lighter-green);
@@ -16,6 +17,7 @@
   font-family: var(--mono-font);
   padding-right: .7rem;
   right: -.7rem;
+  border-radius: 3px 3px 0px 3px;
 }
 
 .page-list-item:after{
@@ -24,8 +26,17 @@
   bottom: -12px;
   right: -2px;
   border-style: solid;
-  border-width: 12px 12px 0 0;
+  border-width: 10px 10px 0 0;
   border-color: var(--dark-green) transparent transparent transparent;
+}
+
+.page-list-item:hover{
+  background-color: var(--light-purple);
+  border-color: var(--dark-purple);
+}
+
+.page-list-item:hover:after{
+  border-color: var(--dark-purple) transparent transparent transparent;
 }
 
 .page-list-item a{
@@ -34,14 +45,6 @@
   display: block;
   color: inherit;
   text-decoration: none;
-}
-
-.page-list-item:hover{
-  background-color: var(--light-purple);
-}
-
-.page-list-item:hover:after{
-  border-color: var(--dark-purple) transparent transparent transparent;
 }
 
 .link{

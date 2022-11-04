@@ -7,55 +7,54 @@ import ImageTool from "@editorjs/simple-image";
 import MarkerTool from "@editorjs/marker";
 import PageLinks from "~/components/page-links/page-links";
 import LinkAutocomplete from "@editorjs/link-autocomplete";
+import DeletePageIcon from "~/components/delete-page-icon/delete-page-icon";
 
 export default component$(({ page }: PageProps) => {
   useStyles$(styles);
 
-  useClientEffect$(
-    () => {
-      const editor = new EditorJS({
-        autofocus: true,
-        holder: "js-editor-holder",
-        data: page.content,
-        tools: {
-          header: Header,
-          list: {
-            class: List,
-            inlineToolbar: false,
-          },
-          image: {
-            class: ImageTool,
-            inlineToolbar: false,
-          },
-          link: {
-            class: LinkAutocomplete,
-            config: {
-              endpoint: `${window.location.origin}/page/api/search`,
-              queryParam: "search",
-            },
-          },
-          marker: {
-            class: MarkerTool,
-            shortcut: "CMD+SHIFT+M",
+  useClientEffect$(() => {
+    const editor = new EditorJS({
+      autofocus: true,
+      holder: "js-editor-holder",
+      data: page.content,
+      tools: {
+        header: Header,
+        list: {
+          class: List,
+          inlineToolbar: false,
+        },
+        image: {
+          class: ImageTool,
+          inlineToolbar: false,
+        },
+        link: {
+          class: LinkAutocomplete,
+          config: {
+            endpoint: `${window.location.origin}/page/api/search`,
+            queryParam: "search",
           },
         },
-        onChange: async (api, event) => {
-          console.log({ api, event });
-          const update = await editor.save();
-          await fetch("../page/api/update", {
-            method: "POST",
-            body: JSON.stringify({ id: page._id, update }),
-          });
+        marker: {
+          class: MarkerTool,
+          shortcut: "CMD+SHIFT+M",
         },
-      });
-    },
-    { eagerness: "load" }
-  );
+      },
+      onChange: async () => {
+        const update = await editor.save();
+        await fetch("../page/api/update", {
+          method: "POST",
+          body: JSON.stringify({ id: page._id, update }),
+        });
+      },
+    });
+  });
 
   return (
     <>
       <header>
         <h2 class="page-title">{page.title}</h2>
+
+        <DeletePageIcon page={page} />
       </header>
 
       <div class="page-content">

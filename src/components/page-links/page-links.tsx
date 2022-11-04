@@ -15,10 +15,15 @@ export default component$(({ page }: Props) => {
 
   const links = useResource$(async () => {
     try {
-      const res = await fetch(`http://localhost:5173/page/api/links`, {
+      const res = await fetch(`http://dev.newt:5173/page/api/links`, {
         method: "POST",
+        headers: {
+          responseType: "application/json",
+        },
         body: JSON.stringify({ page }),
       });
+
+      console.log({ res });
 
       if (!res.ok) {
         throw Error(res.statusText);
@@ -34,6 +39,8 @@ export default component$(({ page }: Props) => {
     <Resource
       value={links}
       onResolved={(links) => {
+        console.log({ links });
+
         return (
           <div class="container">
             <header>

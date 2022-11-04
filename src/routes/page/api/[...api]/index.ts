@@ -1,12 +1,40 @@
-import { updatePageContent } from "~/lib/database";
 import type { RequestHandler } from "@builder.io/qwik-city";
-import { getPageLinks, searchPages, createPage } from "~/lib/database";
+import {
+  getPageLinks,
+  searchPages,
+  createPage,
+  deletePage,
+  getPage,
+  updatePageContent,
+} from "~/lib/database";
+import { getUserPages } from "~/lib/database";
 
-export const onPost: RequestHandler = async ({ params, request }) => {
-  if (params.api === "create") {
-    const { title } = await request.json();
+export const onPost: RequestHandler = async ({ params, request, cookie }) => {
+  console.log({ params });
+  const userCookie = cookie.get("newt-user");
+  console.log({ userCookie });
+  const userId = userCookie ? userCookie.value : null;
 
+  // TODO: redirect or error handle
+  if (!userId) return null;
+
+  if (params.api === "get") {
     try {
+      if (userId) {
+        const { pageKey } = await request.json();
+        if (pageKey && userId) {
+          const page = await getPage(pageKey, userId);
+          return page;
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  if (params.api === "create") {
+    try {
+      const { title } = await request.json();
       const newPage = await createPage({
         title,
       });
@@ -17,10 +45,19 @@ export const onPost: RequestHandler = async ({ params, request }) => {
     }
   }
 
-  if (params.api === "update") {
-    const { id, update } = await request.json();
-
+  if (params.api === "delete") {
     try {
+      const { pageId } = await request.json();
+      console.log({ pageId });
+      return await deletePage(pageId, userId);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  if (params.api === "update") {
+    try {
+      const { id, update } = await request.json();
       const updatedPageContent = await updatePageContent({
         id,
         update,
@@ -35,6 +72,7 @@ export const onPost: RequestHandler = async ({ params, request }) => {
   if (params.api === "links") {
     try {
       const { page } = await request.json();
+      console.log({ page });
       const links = await getPageLinks(page);
       return links;
     } catch (err) {
@@ -43,17 +81,29 @@ export const onPost: RequestHandler = async ({ params, request }) => {
   }
 };
 
-export const onGet: RequestHandler = async ({ params, url }) => {
+export const onGet: RequestHandler = async ({ params, url, cookie }) => {
+  const userCookie = cookie.get("newt-user");
+  const userId = userCookie ? userCookie.value : null;
   if (params.api === "search") {
     try {
       const query = url.searchParams.get("search");
-      console.log({ query });
 
       if (query) {
         const pages = await searchPages(query);
         return pages;
       } else {
         throw Error("No query!");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  if (params.api === "currentUserPages") {
+    try {
+      if (userId) {
+        const pages = await getUserPages(userId);
+        return pages;
       }
     } catch (err) {
       console.log(err);

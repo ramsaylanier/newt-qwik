@@ -1,18 +1,19 @@
 .sidebar{
   height: 100vh;
   width: 200px;
-  /* display: flex;
-  flex-flow: column; */
+  display: flex;
+  flex-flow: column;
   position: relative;
   z-index: 10;
+  background-color: var(--light-purple);
 }
 
 
 .sidebar-header{
   flex-basis: var(--header-height);
   height: var(--header-height);
-  border-bottom: 3px solid var(--light-purple);
-  box-shadow: -15px 0px 20px -5px var(--dark-purple);
+  border-bottom: 3px solid var(--dark-purple);
+  box-shadow: -15px 0px 20px -10px black;
   position: relative;
   z-index: 2;
 }
