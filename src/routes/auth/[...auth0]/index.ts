@@ -62,7 +62,6 @@ export const onGet: RequestHandler = async ({
   response,
   cookie,
 }) => {
-  console.log({ url });
   if (params.auth0 === "callback") {
     try {
       const accessCode = url.searchParams.get("code");
@@ -73,12 +72,11 @@ export const onGet: RequestHandler = async ({
 
         if (tokenData) {
           const profile = await getProfile(tokenData?.access_token);
-          response.headers.set(
-            "Set-Cookie",
-            `newt-user=${encodeURIComponent(
-              profile.sub
-            )}; Path=/ ; Domain=dev.newt ;`
-          );
+
+          cookie.set("newt-user", profile.sub, {
+            domain: "dev.newt",
+            path: "/",
+          });
 
           currentUser = profile;
         } else {
@@ -93,9 +91,7 @@ export const onGet: RequestHandler = async ({
   }
 
   if (params.auth0 === "logout") {
-    cookie.delete("newt-user");
-    const cookies = response.headers.get("cookie");
-    console.log({ cookies });
+    // delete cookie
     response.headers.set(
       "Set-Cookie",
       `newt-user = null; Path=/ ; Domain=dev.newt ; Max-Age=0`
