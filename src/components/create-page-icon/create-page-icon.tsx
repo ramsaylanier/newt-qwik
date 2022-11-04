@@ -15,33 +15,38 @@ export default component$(() => {
   useStyles$(styles);
   const userStore = useContext(Auth0Context);
 
-  const store = useStore({
+  const state = useStore({
     open: false,
     title: "",
   });
 
   const handleClick = $(() => {
-    store.open = true;
+    state.open = true;
   });
 
   const handleClose = $(() => {
-    store.open = false;
+    state.open = false;
   });
 
   const handleChange = $((event: any) => {
-    store.title = event?.target?.value;
+    state.title = event?.target?.value;
   });
 
   const handleSubmit = $(async () => {
     const res = await fetch("/page/api/create", {
       method: "POST",
-      body: JSON.stringify({ title: store.title }),
+      headers: {
+        responseType: "application/json",
+      },
+      body: JSON.stringify({ title: state.title }),
     });
+
+    console.log({ res });
 
     if (res.ok && userStore.user) {
       const newPage = await res.json();
-      userStore.pages.push(newPage);
-      store.open = false;
+      userStore.pages.unshift(newPage);
+      state.open = false;
     }
   });
 
@@ -51,7 +56,7 @@ export default component$(() => {
         <MUIAddIcon fontSize="inherit" />
       </IconButton>
 
-      <MUIDialog open={store.open} onClose$={handleClose}>
+      <MUIDialog open={state.open} onClose$={handleClose}>
         <header class="dialog-header">
           <h3 class="dialog-title">Create New Page</h3>
         </header>
@@ -62,6 +67,7 @@ export default component$(() => {
               name="page-title"
               placeholder="Page Title"
               onChange$={handleChange}
+              value={state.title}
             />
 
             <Button

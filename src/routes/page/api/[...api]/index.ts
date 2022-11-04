@@ -12,7 +12,6 @@ import { getUserPages } from "~/lib/database";
 export const onPost: RequestHandler = async ({ params, request, cookie }) => {
   console.log({ params });
   const userCookie = cookie.get("newt-user");
-  console.log({ userCookie });
   const userId = userCookie ? userCookie.value : null;
 
   // TODO: redirect or error handle
@@ -35,9 +34,9 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
   if (params.api === "create") {
     try {
       const { title } = await request.json();
-      const newPage = await createPage({
-        title,
-      });
+      const newPage = await createPage(title, userId);
+
+      console.log({ newPage });
 
       return newPage;
     } catch (err) {

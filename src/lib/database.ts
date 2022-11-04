@@ -15,15 +15,14 @@ export const db = new Database({
   auth: { username, password },
 });
 
-export const createPage = async ({ title }: { title: string }) => {
+export const createPage = async (title: string, userId: string) => {
   const collection = db.collection("Pages");
-  const user = getCurrentUser();
-  if (!user) return;
+  if (!userId) return;
   try {
     const newPage = await collection.save({
       title: title,
       lastEdited: new Date(),
-      ownerId: user.sub,
+      ownerId: userId,
       private: true,
     });
     return await collection.document(newPage);
