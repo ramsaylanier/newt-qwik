@@ -16,6 +16,7 @@ interface Page {
   title: string;
   content: PageContent;
   ownerId: string;
+  private: boolean;
 }
 
 interface PageContent {

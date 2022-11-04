@@ -4,7 +4,9 @@ import {
   Resource,
   useStylesScoped$,
 } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
 import styles from "./page-links.css?inline";
+import { getPageLinks } from "~/lib/database";
 
 interface Props {
   page: Page;
@@ -13,34 +15,20 @@ interface Props {
 export default component$(({ page }: Props) => {
   useStylesScoped$(styles);
 
-  const links = useResource$(async () => {
+  const links = useResource$<PageEdge[]>(async () => {
     try {
-      const res = await fetch(`http://dev.newt:5173/page/api/links`, {
-        method: "POST",
-        headers: {
-          responseType: "application/json",
-        },
-        body: JSON.stringify({ page }),
-      });
-
-      console.log({ res });
-
-      if (!res.ok) {
-        throw Error(res.statusText);
-      } else {
-        return await res.json();
-      }
+      const links = (await getPageLinks(page)) || [];
+      return links;
     } catch (err) {
       console.log(err);
+      return [];
     }
   });
 
   return (
     <Resource
       value={links}
-      onResolved={(links) => {
-        console.log({ links });
-
+      onResolved={(links: PageEdge[]) => {
         return (
           <div class="container">
             <header>
@@ -52,9 +40,9 @@ export default component$(({ page }: Props) => {
                   links.map((link: PageEdge) => {
                     return (
                       <li>
-                        <a href={`/page/${link.target._key}`}>
+                        <Link href={`/page/${link.target._key}`}>
                           {link.target.title}
-                        </a>
+                        </Link>
                       </li>
                     );
                   })

@@ -209,10 +209,15 @@ export const getPage = async (pageKey: string, userId: string) => {
   }
 };
 
+interface PageResult {
+  edge: PageEdge;
+  page: Page;
+}
+
 export const getPageLinks = async (page: Page) => {
   try {
     const collection = await db.collection("PageEdges");
-    const cursor = await db.query(aql`
+    const cursor = await db.query<PageResult>(aql`
       FOR edge IN ${collection}
       FILTER edge._to == ${page._id}
         FOR page IN Pages FILTER page._id == edge._from
@@ -220,13 +225,12 @@ export const getPageLinks = async (page: Page) => {
     `);
 
     const result = await cursor.all();
-    console.log({ result });
 
     return result
       .filter((r) => {
         return r.page.ownerId === page.ownerId || !r.page.private;
       })
-      .map((r) => {
+      .map<PageEdge>((r) => {
         r.edge.target = r.page;
         return r.edge;
       });

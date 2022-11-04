@@ -110,14 +110,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@builder.io/qwik@npm:^0.12.1":
-  version: 0.12.1
-  resolution: "@builder.io/qwik@npm:0.12.1"
+"@builder.io/qwik@portal:/Users/ramsay.lanier/qwik/packages/qwik::locator=my-qwik-basic-starter%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@builder.io/qwik@portal:/Users/ramsay.lanier/qwik/packages/qwik::locator=my-qwik-basic-starter%40workspace%3A."
   bin:
-    qwik: qwik.cjs
-  checksum: 65bb5a84c43318db5f39a5282e9fbb183d94b2c7c61b3b1675a38f8b5bd47a81d4a0a3107d0190dafba2cf5fe93e8ffac41d6aa9fd74461b90f3d2c002bbfcfb
+    qwik: ./dist/qwik.cjs
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@chakra-ui/accordion@npm:2.1.2":
   version: 2.1.2
