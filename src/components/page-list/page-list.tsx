@@ -23,7 +23,11 @@ export default component$(() => {
       {store.pages.map((page) => {
         return (
           <li key={page._id} class="page-list-item">
+<<<<<<< Updated upstream
             <Link prefetch={true} href={`/page/${page._key}`}>{page.title}</Link>
+=======
+            <Link href={`/page/${page._key}`}>{page.title}</Link>
+>>>>>>> Stashed changes
           </li>
         );
       })}

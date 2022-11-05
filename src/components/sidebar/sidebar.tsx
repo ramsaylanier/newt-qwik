@@ -9,7 +9,7 @@ import styles from "./sidebar.css?inline";
 import auth0Client from "~/lib/authClient";
 import PageList from "~/components/page-list/page-list";
 import CreatePageIcon from "~/components/create-page-icon/create-page-icon";
-import { MUIShareIcon } from "~/integrations/react/mui";
+import Icon from "~/components/icons/icon";
 import IconButton from "~/components/buttons/icon-button";
 import Button from "~/components/buttons/button";
 import { Auth0Context } from "~/lib/auth";
@@ -66,7 +66,7 @@ export default component$(() => {
               <div style={{ marginLeft: "10px" }}>
                 <CreatePageIcon />
                 <IconButton onClick$={handleGraphClick}>
-                  <MUIShareIcon fontSize="inherit" />
+                  <Icon name="graphBubble" />
                 </IconButton>
               </div>
             )}

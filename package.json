@@ -66,8 +66,5 @@
     "normalize.css": "^8.0.1",
     "slate": "^0.84.0",
     "slate-react": "^0.83.2"
-  },
-  "resolutions": {
-    "@builder.io/qwik-city": "portal:/Users/ramsay.lanier/qwik/packages/qwik-city"
   }
 }

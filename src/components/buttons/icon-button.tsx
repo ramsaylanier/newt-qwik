@@ -1,6 +1,6 @@
 import { component$, Slot, useStyles$ } from "@builder.io/qwik";
 import type { PropFunction } from "@builder.io/qwik";
-import styles from "./buttons.css";
+import styles from "./buttons.css?inline";
 
 interface IconButtonProps {
   onClick$: PropFunction<() => void>;

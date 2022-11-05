@@ -1,10 +1,10 @@
 import { component$, useStore, $, useContext } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
-import { MUIDeleteIcon, MUIDialog } from "~/integrations/react/mui";
+import { MUIDialog } from "~/integrations/react/mui";
+import Icon from "~/components/icons/icon";
 import IconButton from "~/components/buttons/icon-button";
 import Button from "~/components/buttons/button";
 import { Auth0Context } from "~/lib/auth";
-import page from "../page/page";
 
 interface DeletePageIconProps {
   page: Page;
@@ -43,10 +43,10 @@ export default component$((props: DeletePageIconProps) => {
   return (
     <>
       <IconButton onClick$={handleClick}>
-        <MUIDeleteIcon fontSize="inherit" client:visible />
+        <Icon name="delete" />
       </IconButton>
 
-      <MUIDialog open={state.open} onClose$={handleClose}>
+      <MUIDialog open={state.open} onClose$={handleClose} client:only>
         <header class="dialog-header">
           <h3 class="dialog-title">Delete Page</h3>
         </header>

@@ -11,9 +11,12 @@ export default defineConfig(() => {
       headers: {
         "Cache-Control": "public, max-age=600",
       },
+      host: "dev.newt",
+      port: 5173,
     },
     server: {
       host: "dev.newt",
+      port: 5173,
     },
   };
 });

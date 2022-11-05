@@ -8,6 +8,12 @@
   transition: background-color 150ms ease-out;
 }
 
+.base-button svg{
+  height: 100%;
+  width: 100%;
+  fill: currentColor;
+}
+
 .newt-button{
   border-radius: 3px;
   padding: .5rem 1rem;

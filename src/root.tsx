@@ -10,6 +10,7 @@ import globalStyles from "./global.css?inline";
 import "normalize.css";
 import "./typeplate.css";
 import { Auth0Provider } from "~/lib/auth";
+import SVGIconSymbols from "./components/icons/iconSymbols";
 
 export default component$(() => {
   /**
@@ -28,6 +29,7 @@ export default component$(() => {
         <RouterHead />
       </head>
       <body lang="en">
+        <SVGIconSymbols />
         <Auth0Provider>
           <RouterOutlet q:slot="children" />
         </Auth0Provider>

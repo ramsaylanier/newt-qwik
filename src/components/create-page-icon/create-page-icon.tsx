@@ -5,7 +5,8 @@ import {
   useStyles$,
   useContext,
 } from "@builder.io/qwik";
-import { MUIAddIcon, MUIDialog } from "~/integrations/react/mui";
+import { MUIDialog } from "~/integrations/react/mui";
+import Icon from "~/components/icons/icon";
 import styles from "./create-page-icon.css?inline";
 import IconButton from "~/components/buttons/icon-button";
 import Button from "~/components/buttons/button";
@@ -53,10 +54,10 @@ export default component$(() => {
   return (
     <>
       <IconButton onClick$={handleClick}>
-        <MUIAddIcon fontSize="inherit" />
+        <Icon name="add" />
       </IconButton>
 
-      <MUIDialog open={state.open} onClose$={handleClose}>
+      <MUIDialog open={state.open} onClose$={handleClose} client:visible>
         <header class="dialog-header">
           <h3 class="dialog-title">Create New Page</h3>
         </header>
