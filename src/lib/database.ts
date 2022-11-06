@@ -1,7 +1,6 @@
 import { Database, aql } from "arangojs";
 import { literal } from "arangojs/aql";
 import { load } from "cheerio";
-import { getCurrentUser } from "~/routes/auth/[...auth0]";
 
 const host = import.meta.env.VITE_DATABASE_HOST;
 const databaseName = import.meta.env.VITE_DATABASE_NAME;

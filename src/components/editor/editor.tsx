@@ -1,4 +1,4 @@
-import { useClientEffect$, component$ } from "@builder.io/qwik";
+import { useClientEffect$, component$, $ } from "@builder.io/qwik";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
@@ -7,7 +7,7 @@ import MarkerTool from "@editorjs/marker";
 import LinkAutocomplete from "@editorjs/link-autocomplete";
 
 export default component$(({ page }: PageProps) => {
-  useClientEffect$(async () => {
+  useClientEffect$(() => {
     if (typeof window !== "undefined") {
       const editor = new EditorJS({
         autofocus: true,
@@ -37,7 +37,7 @@ export default component$(({ page }: PageProps) => {
         },
         onChange: async () => {
           const update = await editor.save();
-          await fetch("../page/api/update", {
+          fetch("../page/api/update", {
             method: "POST",
             body: JSON.stringify({ id: page._id, update }),
           });

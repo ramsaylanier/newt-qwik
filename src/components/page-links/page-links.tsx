@@ -7,6 +7,7 @@ import {
 import { Link } from "@builder.io/qwik-city";
 import styles from "./page-links.css?inline";
 import { getPageLinks } from "~/lib/database";
+import { load } from "cheerio";
 
 interface Props {
   page: Page;
@@ -38,11 +39,24 @@ export default component$(({ page }: Props) => {
               <ul>
                 {links ? (
                   links.map((link: PageEdge) => {
+                    const excerpt = link.target.content.blocks.find((block) => {
+                      const dom = load(block.data?.text);
+                      const anchor = dom(`a[data-page-key=${page._key}]`);
+                      return anchor.length > 0;
+                    });
+
                     return (
                       <li>
-                        <Link href={`/page/${link.target._key}`}>
+                        <Link href={`/page/${link.target._key}`} class="link">
                           {link.target.title}
                         </Link>
+
+                        {excerpt && (
+                          <p
+                            class="excerpt"
+                            dangerouslySetInnerHTML={excerpt.data.text}
+                          />
+                        )}
                       </li>
                     );
                   })

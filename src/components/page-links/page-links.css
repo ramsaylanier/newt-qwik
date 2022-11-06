@@ -5,7 +5,7 @@
 
 .container .title{
   margin: 0;
-}
+} 
 
   
 ul{
@@ -19,9 +19,15 @@ li{
   border-bottom: 1px solid var(--light-purple);
 } 
 
-a{
+.link{
   display: block;
   width: 100%;
-  padding: .5rem;
+  padding: 0.5rem;
   text-decoration: none;
-} 
+  width: 100%;
+  background-color: var(--lighter-green);
+}
+
+.excerpt{
+  padding: 1rem;
+}
