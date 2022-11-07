@@ -24,6 +24,13 @@
   padding: 0 2rem;
 } 
 
+.page-title-input{
+  color: var(--dark-purple);
+  font-size: 2rem;
+  padding: 0rem 2rem;
+  border-bottom: 1px solid var(--light-purple);
+}
+
 .page-content{
   grid-area: body;
   display: grid;
@@ -43,4 +50,10 @@
   height: 100%;
   border-left: 3px solid var(--light-purple);
   grid-area: links;
+}
+
+.page-content a[data-page-key]{
+  background: var(--lighter-green);
+  border-bottom: 1px solid var(--dark-purple);
+  text-decoration: none;
 }

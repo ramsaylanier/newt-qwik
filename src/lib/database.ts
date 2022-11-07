@@ -72,6 +72,27 @@ export const updatePageContent = async ({
   }
 };
 
+export const updatePageTitle = async ({
+  id,
+  title,
+}: {
+  id: string;
+  title: string;
+}) => {
+  try {
+    const collection = await db.collection("Pages");
+    const document = await collection.document(id);
+    const updatedDoc = await collection.update(document._key, {
+      title,
+      lastEdited: new Date(),
+    });
+    const newDocument = await collection.document(updatedDoc);
+    return newDocument;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const updatePageLinks = async (
   pageContent: PageContent,
   pageId: string

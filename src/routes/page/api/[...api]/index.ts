@@ -6,6 +6,7 @@ import {
   deletePage,
   getPage,
   updatePageContent,
+  updatePageTitle,
 } from "~/lib/database";
 import { getUserPages } from "~/lib/database";
 
@@ -60,6 +61,20 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
       const updatedPageContent = await updatePageContent({
         id,
         update,
+      });
+
+      return updatedPageContent;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  if (params.api === "updatePageTitle") {
+    try {
+      const { id, title } = await request.json();
+      const updatedPageContent = await updatePageTitle({
+        id,
+        title,
       });
 
       return updatedPageContent;

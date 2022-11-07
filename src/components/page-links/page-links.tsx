@@ -3,8 +3,9 @@ import {
   useResource$,
   Resource,
   useStylesScoped$,
+  $,
 } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { Link, useNavigate } from "@builder.io/qwik-city";
 import styles from "./page-links.css?inline";
 import { getPageLinks } from "~/lib/database";
 import { load } from "cheerio";
@@ -15,6 +16,7 @@ interface Props {
 
 export default component$(({ page }: Props) => {
   useStylesScoped$(styles);
+  const nav = useNavigate();
 
   const links = useResource$<PageEdge[]>(async () => {
     try {
@@ -23,6 +25,13 @@ export default component$(({ page }: Props) => {
     } catch (err) {
       console.log(err);
       return [];
+    }
+  });
+
+  const handleExcerptClick = $((event) => {
+    if (event.target.dataset.pageKey) {
+      console.log(event.target.dataset.pageKey);
+      nav.path = `/page/${event.target.dataset.pageKey}`;
     }
   });
 
@@ -55,6 +64,8 @@ export default component$(({ page }: Props) => {
                           <p
                             class="excerpt"
                             dangerouslySetInnerHTML={excerpt.data.text}
+                            onClick$={handleExcerptClick}
+                            preventdefault:click
                           />
                         )}
                       </li>

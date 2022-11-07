@@ -1,4 +1,4 @@
-import { useClientEffect$, component$, $ } from "@builder.io/qwik";
+import { useClientEffect$, component$ } from "@builder.io/qwik";
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";

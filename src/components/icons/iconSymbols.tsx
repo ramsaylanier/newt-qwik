@@ -5,6 +5,9 @@ const SVGIconSymbols = component$(() => (
     <symbol id="add" height="24" width="24" viewBox="0 0 24 24">
       <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
     </symbol>
+    <symbol id="accept" height="24" width="24" viewBox="0 0 24 24">
+      <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+    </symbol>
     <symbol id="alert" height="24" width="24" viewBox="0 0 24 24">
       <path d="M13,13H11V7H13M12,17.3A1.3,1.3 0 0,1 10.7,16A1.3,1.3 0 0,1 12,14.7A1.3,1.3 0 0,1 13.3,16A1.3,1.3 0 0,1 12,17.3M15.73,3H8.27L3,8.27V15.73L8.27,21H15.73L21,15.73V8.27L15.73,3Z" />
     </symbol>

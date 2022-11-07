@@ -25,13 +25,13 @@ export default component$(() => {
   const page = useEndpoint<Page>();
 
   return (
-    <Resource
-      value={page}
-      onResolved={(page) => {
-        console.log({ page });
-
-        return <>{page && <Page key={page._key} page={page} />}</>;
-      }}
-    />
+    <>
+      <Resource
+        value={page}
+        onResolved={(page) => {
+          return <>{page && <Page key={page._key} page={page} />}</>;
+        }}
+      />
+    </>
   );
 });

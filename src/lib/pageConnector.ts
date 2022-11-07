@@ -13,7 +13,7 @@ const pageFetch = async (endpoint: string, fetchOptions: any) => {
         ...fetchOptions.headers,
       },
       credentials: fetchOptions.credentials || "include",
-      ...(fetchOptions.body ? { body: fetchOptions.body } : {}),
+      ...(fetchOptions.body ? { body: JSON.stringify(fetchOptions.body) } : {}),
     });
 
     return await res.json();
@@ -25,6 +25,15 @@ const pageFetch = async (endpoint: string, fetchOptions: any) => {
 export const getCurrentUserPages = async () => {
   const pages = await pageFetch("currentUserPages", {
     method: "GET",
+  });
+
+  return pages;
+};
+
+export const updatePageTitle = async (id: string, title: string) => {
+  const pages = await pageFetch("updatePageTitle", {
+    method: "POST",
+    body: { id, title },
   });
 
   return pages;

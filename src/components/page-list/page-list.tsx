@@ -13,6 +13,8 @@ export default component$(() => {
   useStyles$(styles);
   const store = useContext(Auth0Context);
 
+  console.log(store.pages);
+
   useMount$(async () => {
     const pages = await getCurrentUserPages();
     store.pages = pages;
