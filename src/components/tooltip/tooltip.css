@@ -1,0 +1,15 @@
+.tooltip-container{
+  position: absolute;
+  display: contents;
+  z-index: 100;
+}
+
+.tooltip{
+  position: fixed;
+  z-index: 100;
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid var(--dark-purple);
+  padding: .25rem .5rem;
+  font-size: .8rem;
+}

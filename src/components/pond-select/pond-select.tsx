@@ -13,6 +13,7 @@ import IconButton from "~/components/buttons/icon-button";
 import Icon from "~/components/icons/icon";
 import Popover from "~/components/popover/popover";
 import Button from "../buttons/button";
+import Tooltip from "../tooltip/tooltip";
 
 import { createPond } from "~/lib/database";
 
@@ -68,7 +69,9 @@ export default component$(() => {
 
   return (
     <div class="pond-select-container">
-      <p class="active-pond-title">{store.activePond?.title}</p>
+      <Tooltip title={store.activePond?.title || ""} placement="bottom">
+        <p class="active-pond-title">{store.activePond?.title}</p>
+      </Tooltip>
       <IconButton
         onClick$={(event) => {
           state.anchorEl = event.target;

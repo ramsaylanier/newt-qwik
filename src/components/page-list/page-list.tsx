@@ -6,8 +6,9 @@ import {
 } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import styles from "./page-list.css?inline";
-import { Auth0Context } from "~/lib/auth";
+import Tooltip from "../tooltip/tooltip";
 
+import { Auth0Context } from "~/lib/auth";
 import { getPagesFromPond } from "~/lib/database";
 
 export default component$(() => {
@@ -29,9 +30,11 @@ export default component$(() => {
         console.log({ page });
         return (
           <li key={page._id} class="page-list-item">
-            <Link prefetch={true} href={`/page/${page._key}`}>
-              {page.title}
-            </Link>
+            <Tooltip title={page.title}>
+              <Link prefetch={true} href={`/page/${page._key}`}>
+                {page.title}
+              </Link>
+            </Tooltip>
           </li>
         );
       })}
