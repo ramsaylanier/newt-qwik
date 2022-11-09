@@ -1,6 +1,8 @@
 import { Database, aql } from "arangojs";
+import type { EdgeCollection } from "arangojs/collection";
 import { literal } from "arangojs/aql";
 import { load } from "cheerio";
+import { updateUserMetadata } from "~/routes/auth/[...auth0]";
 
 const host = import.meta.env.VITE_DATABASE_HOST;
 const databaseName = import.meta.env.VITE_DATABASE_NAME;
@@ -14,16 +16,23 @@ export const db = new Database({
   auth: { username, password },
 });
 
-export const createPage = async (title: string, userId: string) => {
+export const createPage = async (title: string, user: UserProfile) => {
   const collection = db.collection("Pages");
-  if (!userId) return;
+  const edgeCollection = db.collection("PondEdges");
+  if (!user) return;
   try {
     const newPage = await collection.save({
       title: title,
       lastEdited: new Date(),
-      ownerId: userId,
+      ownerId: user.user_id,
       private: true,
     });
+
+    edgeCollection.save({
+      _from: `Ponds/${user.user_metadata.activePond}`,
+      _to: newPage._id,
+    });
+
     return await collection.document(newPage);
   } catch (e) {
     console.log(e);
@@ -32,14 +41,22 @@ export const createPage = async (title: string, userId: string) => {
 
 export const deletePage = async (pageId: string, userId: string) => {
   if (!userId) return;
-  const collection = db.collection("Pages");
   try {
+    const collection = db.collection("Pages");
+    const edgeCollection = db.collection("PondEdges");
     const document = await collection.document(pageId);
 
     if (document.ownerId !== userId) {
       throw Error("You aren't the owner");
     }
 
+    const { edges } = await edgeCollection.edges(document._id, {
+      allowDirtyRead: true,
+    });
+
+    edges.forEach((edge) => {
+      edgeCollection.remove(edge);
+    });
     collection.remove(document._key);
     return pageId;
   } catch (e) {
@@ -56,7 +73,6 @@ export const updatePageContent = async ({
 }) => {
   try {
     const collection = await db.collection("Pages");
-    const edgeCollection = await db.collection("PageEdges");
     const document = await collection.document(id);
     const updatedDoc = await collection.update(document._key, {
       content: update,
@@ -149,25 +165,78 @@ export const updatePageLinks = async (
   });
 };
 
-export const getUserPages = async (userId?: string) => {
+export const createPond = async (
+  title: string,
+  userId: string
+): Promise<Pond | null> => {
+  const collection = db.collection("Ponds");
+  try {
+    if (!userId) throw Error("No user!");
+    const newPond = await collection.save({
+      title: title,
+      lastEdited: new Date(),
+      ownerId: userId,
+      private: true,
+    });
+    return await collection.document(newPond);
+  } catch (e) {
+    console.log(e);
+  }
+
+  return null;
+};
+
+export const getUserPonds = async (userId?: string) => {
   if (userId) {
     try {
-      const collection = db.view("pageSearch");
-      const filter = literal(`FILTER page.ownerId == '${userId}'`);
-      const limit = literal("");
+      const collection = db.view("pondSearch");
+      const filter = literal(`FILTER pond.ownerId == '${userId}'`);
       const query = await db.query(aql`
-          FOR page IN ${collection} 
+          FOR pond IN ${collection}
           ${filter}
-          SORT page.lastEdited DESC
-          ${limit}
-          RETURN page
+          SORT pond.lastEdited DESC
+          RETURN pond
         `);
 
-      const pages: Page[] = [];
+      const ponds: Pond[] = [];
+      for await (const pond of query) {
+        ponds.push(pond);
+      }
+
+      // create new pond
+      if (ponds.length === 0) {
+        const newPond = await createPond("My First Pond", userId);
+        if (newPond) {
+          updateUserMetadata(userId, { activePond: newPond._key });
+        }
+      }
+
+      return ponds;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  return [];
+};
+
+export const getPagesFromPond = async (pond?: Pond): Promise<Page[]> => {
+  if (pond) {
+    try {
+      const pages = [];
+      const query = await db.query(aql`
+          FOR pond IN Ponds
+          FILTER pond._id == ${pond._id}
+            FOR page IN OUTBOUND pond PondEdges
+            RETURN page
+        `);
+
       for await (const page of query) {
+        console.log({ page });
         pages.push(page);
       }
 
+      console.log({ pages });
       return pages;
     } catch (e) {
       console.log(e);
@@ -177,6 +246,7 @@ export const getUserPages = async (userId?: string) => {
   return [];
 };
 
+// used when hyperlinking pages together in the editor
 export const searchPages = async (queryString: string) => {
   try {
     const collection = db.view("pageSearch");
@@ -209,15 +279,16 @@ export const searchPages = async (queryString: string) => {
 
 export const getPage = async (pageKey: string, userId: string) => {
   try {
-    const collection = db.collection("Pages");
-    const filter = `FILTER page._key == '${pageKey}'`;
+    console.log({ pageKey, userId });
     const cursor = await db.query(aql`
-            FOR page IN ${collection}
-            ${literal(filter)}
+            FOR page IN Pages
+            FILTER page._key == ${pageKey}
               RETURN page
           `);
 
     const result = await cursor.next();
+
+    console.log({ result });
 
     if (!result.private || result.ownerId === userId) {
       return result;

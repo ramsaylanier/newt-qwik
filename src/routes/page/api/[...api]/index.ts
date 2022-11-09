@@ -7,8 +7,8 @@ import {
   getPage,
   updatePageContent,
   updatePageTitle,
+  getUserPonds,
 } from "~/lib/database";
-import { getUserPages } from "~/lib/database";
 
 export const onPost: RequestHandler = async ({ params, request, cookie }) => {
   console.log({ params });
@@ -34,8 +34,8 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
 
   if (params.api === "create") {
     try {
-      const { title } = await request.json();
-      const newPage = await createPage(title, userId);
+      const { title, user } = await request.json();
+      const newPage = await createPage(title, user);
 
       console.log({ newPage });
 
@@ -98,6 +98,9 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
 export const onGet: RequestHandler = async ({ params, url, cookie }) => {
   const userCookie = cookie.get("newt-user");
   const userId = userCookie ? userCookie.value : null;
+
+  console.log({ userCookie, userId });
+
   if (params.api === "search") {
     try {
       const query = url.searchParams.get("search");
@@ -113,11 +116,12 @@ export const onGet: RequestHandler = async ({ params, url, cookie }) => {
     }
   }
 
-  if (params.api === "currentUserPages") {
+  if (params.api === "currentUserPonds") {
+    console.log({ userId });
     try {
       if (userId) {
-        const pages = await getUserPages(userId);
-        return pages;
+        const ponds = await getUserPonds(userId);
+        return ponds;
       }
     } catch (err) {
       console.log(err);

@@ -12,6 +12,7 @@ import CreatePageIcon from "~/components/create-page-icon/create-page-icon";
 import Icon from "~/components/icons/icon";
 import IconButton from "~/components/buttons/icon-button";
 import Button from "~/components/buttons/button";
+import PondSelect from "~/components/pond-select/pond-select";
 import { Auth0Context } from "~/lib/auth";
 
 export default component$(() => {
@@ -20,7 +21,7 @@ export default component$(() => {
 
   // check for auth cookie
   useClientEffect$(async () => {
-    const res = await fetch("http://dev.newt:5173/auth/me", {
+    const res = await fetch(`${window.location.origin}/auth/me`, {
       method: "GET",
       headers: {
         responseType: "application/json",
@@ -29,8 +30,9 @@ export default component$(() => {
     });
 
     if (res.ok) {
-      const userId: string = await res.json();
-      store.user = userId;
+      const user: UserProfile = await res.json();
+      console.log({ user });
+      store.user = user;
     }
   });
 
@@ -73,7 +75,12 @@ export default component$(() => {
           </div>
         </header>
 
-        <nav class="sidebar-nav">{store.user && <PageList />}</nav>
+        {store.user && (
+          <>
+            <PondSelect />
+            <nav class="sidebar-nav">{store.user && <PageList />}</nav>
+          </>
+        )}
       </>
     </aside>
   );

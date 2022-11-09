@@ -68,11 +68,9 @@ const Editor = (props: EditorProps) => {
 
   useEffect(() => {
     if (renderedRef.current && containerRef.current) {
-      console.log("init");
       initEditor();
     }
     return () => {
-      console.log("return");
       editorRef?.current?.destroy();
       editorRef.current = null;
     };

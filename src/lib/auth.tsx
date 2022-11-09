@@ -7,8 +7,9 @@ import {
 } from "@builder.io/qwik";
 
 interface AuthProps {
-  user?: string | null;
-  pages: Page[];
+  user?: UserProfile | null;
+  activePond: Pond | null;
+  ponds: Pond[];
   loading: boolean;
 }
 
@@ -17,7 +18,8 @@ export const Auth0Provider = component$(() => {
   const state = useStore(
     {
       user: null,
-      pages: [],
+      activePond: null,
+      ponds: [],
       loading: false,
     },
     { recursive: true }

@@ -1,0 +1,56 @@
+.pond-select-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 1rem;
+  background-color: white;
+  border-bottom: 3px solid var(--dark-purple);
+  font-family: var(--mono-font);
+}
+
+.active-pond-title{
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select-button{
+  flex: 1;
+}
+
+.pond-list{
+  margin: 0;
+  padding: 0;
+}
+
+.pond-list-item{
+  list-style: none;
+  padding: .5rem 1rem;
+  cursor: pointer;
+}
+
+.pond-list-item:hover{
+  background-color: var(--lighter-green);
+}
+
+.pond-list-item:not(:first-of-type){
+  border-top: 1px solid black;
+}
+
+.form-container{
+  padding: .5rem;
+  background-color: var(--light-purple);
+}
+
+.form-control{
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container form{
+  display: flex;
+}
+
+.form-container input{
+  padding: .5rem;
+}

@@ -33,8 +33,10 @@ export default component$((props: DeletePageIconProps) => {
       body: JSON.stringify({ pageId: props.page._id }),
     });
 
-    if (res.ok) {
-      store.pages = store.pages.filter((p) => p._id !== props.page._id);
+    if (res.ok && store.activePond) {
+      store.activePond.pages = store.activePond.pages.filter(
+        (p) => p._id !== props.page._id
+      );
       state.open = false;
       nav.path = "/";
     }

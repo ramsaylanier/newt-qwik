@@ -6,7 +6,19 @@ declare module "@editorjs/marker";
 declare module "editorjs-hyperlink";
 
 interface UserProfile {
-  sub: string;
+  user_id: string;
+  user_metadata: {
+    activePond?: string;
+  };
+  ponds: Pond[];
+}
+
+interface Pond {
+  _id: string;
+  _key: string;
+  title: string;
+  ownerId: string;
+  private: boolean;
   pages: Page[];
 }
 
@@ -35,7 +47,7 @@ interface PageEdge {
 
 interface LayoutData {
   user: UserProfile;
-  pages: Page[];
+  ponds: Pond[];
 }
 
 interface PageProps {

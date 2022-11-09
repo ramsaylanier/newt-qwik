@@ -1,0 +1,24 @@
+.popover-root{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+}
+
+.popover-container{
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 3px;
+  border: 3px solid var(--dark-purple);
+  background-color: white;
+  max-width: 50vw;
+  transition: opacity 100ms ease-out;
+}
+
+.popover-header{
+  display: flex;
+  justify-content: flex-end;
+}

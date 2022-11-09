@@ -39,10 +39,10 @@ export default component$(({ page }: PageProps) => {
     page.title = state.title;
     state.isEditing = false;
 
-    const storePage = store.pages.find((p) => p._id === page._id);
+    const storePage = store.activePond?.pages.find((p) => p._id === page._id);
     if (storePage) {
       storePage.title = state.title;
-      store.pages = [...store.pages];
+      // store.pages = [...store.pages];
     }
 
     updatePageTitle(page._id, state.title);

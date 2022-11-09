@@ -17,14 +17,15 @@ export default component$(({ page }: PageProps) => {
           header: Header,
           list: {
             class: List,
-            inlineToolbar: false,
+            inlineToolbar: true,
           },
           image: {
             class: ImageTool,
-            inlineToolbar: false,
+            inlineToolbar: true,
           },
           link: {
             class: LinkAutocomplete,
+            inlineToolbar: true,
             config: {
               endpoint: `${window.location.origin}/page/api/search`,
               queryParam: "search",

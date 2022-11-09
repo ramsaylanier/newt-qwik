@@ -22,12 +22,12 @@ const pageFetch = async (endpoint: string, fetchOptions: any) => {
   }
 };
 
-export const getCurrentUserPages = async () => {
-  const pages = await pageFetch("currentUserPages", {
+export const getCurrentUserPonds = async () => {
+  const ponds = await pageFetch("currentUserPonds", {
     method: "GET",
   });
 
-  return pages;
+  return ponds;
 };
 
 export const updatePageTitle = async (id: string, title: string) => {

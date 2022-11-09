@@ -6,6 +6,7 @@ interface ButtonProps {
   onClick$?: PropFunction<() => void>;
   style?: any;
   classNames?: string;
+  type?: "submit" | "button" | "reset";
 }
 
 export default component$((props: ButtonProps) => {
@@ -18,6 +19,7 @@ export default component$((props: ButtonProps) => {
       }`}
       style={props.style}
       onClick$={props.onClick$}
+      type={props.type || "button"}
     >
       <Slot />
     </button>

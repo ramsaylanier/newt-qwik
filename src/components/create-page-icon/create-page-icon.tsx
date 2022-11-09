@@ -27,6 +27,7 @@ export default component$(() => {
 
   const handleClose = $(() => {
     state.open = false;
+    state.title = "";
   });
 
   const handleChange = $((event: any) => {
@@ -34,20 +35,20 @@ export default component$(() => {
   });
 
   const handleSubmit = $(async () => {
-    const res = await fetch("/page/api/create", {
+    const res = await fetch(`${window.location.origin}/page/api/create`, {
       method: "POST",
       headers: {
-        responseType: "application/json",
+        accept: "application/json",
       },
-      body: JSON.stringify({ title: state.title }),
+      body: JSON.stringify({ title: state.title, user: userStore.user }),
     });
 
-    console.log({ res });
-
     if (res.ok && userStore.user) {
+      handleClose();
       const newPage = await res.json();
-      userStore.pages.unshift(newPage);
-      state.open = false;
+      if (userStore.activePond) {
+        userStore.activePond.pages.push(newPage);
+      }
     }
   });
 
@@ -76,6 +77,7 @@ export default component$(() => {
                 marginTop: "1rem",
                 backgroundColor: "var(--light-purple)",
               }}
+              onClick$={handleSubmit}
             >
               Create
             </Button>
