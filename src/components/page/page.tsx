@@ -36,16 +36,17 @@ export default component$(({ page }: PageProps) => {
   });
 
   const handleSaveName = $(() => {
-    page.title = state.title;
-    state.isEditing = false;
+    if (state.title.length > 0) {
+      page.title = state.title;
+      state.isEditing = false;
 
-    const storePage = store.activePond?.pages.find((p) => p._id === page._id);
-    if (storePage) {
-      storePage.title = state.title;
-      // store.pages = [...store.pages];
+      const storePage = store.activePond?.pages.find((p) => p._id === page._id);
+      if (storePage) {
+        storePage.title = state.title;
+      }
+
+      updatePageTitle(page._id, state.title);
     }
-
-    updatePageTitle(page._id, state.title);
   });
 
   const handleCancelEdit = $(() => {
@@ -58,19 +59,20 @@ export default component$(({ page }: PageProps) => {
       <header>
         {state.isEditing ? (
           <>
-            <input
-              class="page-title-input"
-              type="text"
-              value={state.title}
-              onChange$={handleChange}
-            />
+            <form preventdefault:submit onSubmit$={handleSaveName}>
+              <input
+                class="page-title-input"
+                type="text"
+                value={state.title}
+                onChange$={handleChange}
+              />
 
-            <div>
-              <IconButton onClick$={handleSaveName}>
-                <Icon name="accept" />
-              </IconButton>
-            </div>
-
+              <div>
+                <IconButton onClick$={handleSaveName}>
+                  <Icon name="accept" />
+                </IconButton>
+              </div>
+            </form>
             <div>
               <IconButton onClick$={handleCancelEdit}>
                 <Icon name="cancel" />

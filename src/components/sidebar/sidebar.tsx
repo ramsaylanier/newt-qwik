@@ -76,10 +76,12 @@ export default component$(() => {
         </header>
 
         {store.user && (
-          <>
-            <PondSelect />
-            <nav class="sidebar-nav">{store.user && <PageList />}</nav>
-          </>
+          <nav class="sidebar-nav">
+            <div class="nav-inner">
+              <PondSelect />
+              <PageList />
+            </div>
+          </nav>
         )}
       </>
     </aside>

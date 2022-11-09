@@ -50,7 +50,7 @@ export default component$(
         const aX = anchorRect.x;
         const cWidth = containerRect?.width || 0;
         const x = Math.max(
-          0,
+          5,
           placement === "left"
             ? aX
             : placement === "center"

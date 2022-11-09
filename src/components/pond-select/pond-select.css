@@ -4,7 +4,6 @@
   align-items: center;
   padding: .5rem 1rem;
   background-color: white;
-  border-bottom: 3px solid var(--dark-purple);
   font-family: var(--mono-font);
 }
 
