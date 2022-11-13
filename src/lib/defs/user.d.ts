@@ -4,6 +4,8 @@ declare module "@editorjs/simple-image";
 declare module "@editorjs/link-autocomplete";
 declare module "@editorjs/marker";
 declare module "editorjs-hyperlink";
+declare module "@apollo/client/core/core.cjs";
+declare module "@apollo/client/link/http/http.cjs";
 
 interface UserProfile {
   user_id: string;

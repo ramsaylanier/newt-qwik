@@ -21,17 +21,15 @@
     "qwik": "qwik"
   },
   "devDependencies": {
-    "@builder.io/qwik": "^0.12.1",
-    "@builder.io/qwik-city": "0.0.118",
-    "@builder.io/qwik-react": "0.1.1",
+    "@builder.io/qwik": "^0.13.3",
+    "@builder.io/qwik-city": "^0.0.122",
+    "@builder.io/qwik-react": "^0.1.1",
     "@editorjs/image": "^2.6.2",
     "@editorjs/link-autocomplete": "^0.0.0",
     "@editorjs/marker": "^1.2.2",
     "@editorjs/simple-image": "^1.4.1",
     "@emotion/react": "11.10.4",
     "@emotion/styled": "11.10.4",
-    "@mui/material": "5.10.10",
-    "@mui/x-data-grid": "5.17.8",
     "@types/auth0": "^2.35.6",
     "@types/auth0-js": "^9.14.6",
     "@types/editorjs__header": "^2.6.0",
@@ -43,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "5.41.0",
     "@typescript-eslint/parser": "5.41.0",
     "eslint": "8.26.0",
-    "eslint-plugin-qwik": "0.12.0",
+    "eslint-plugin-qwik": "^0.13.1",
     "node-fetch": "3.2.10",
     "prettier": "2.7.1",
     "react": "18.2.0",
@@ -53,18 +51,17 @@
     "vite-tsconfig-paths": "3.5.0"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.3.6",
+    "@apollo/client": "^3.7.1",
+    "@apollo/server": "^4.1.1",
     "@editorjs/editorjs": "^2.25.0",
     "@editorjs/header": "^2.6.2",
     "@editorjs/list": "^1.7.0",
-    "@mui/icons-material": "^5.10.9",
     "arangojs": "^8.0.0",
     "auth0": "^2.44.0",
     "auth0-js": "^9.19.1",
     "cheerio": "^1.0.0-rc.12",
     "editorjs-hyperlink": "^1.0.6",
-    "normalize.css": "^8.0.1",
-    "slate": "^0.84.0",
-    "slate-react": "^0.83.2"
+    "graphql": "^16.6.0",
+    "normalize.css": "^8.0.1"
   }
 }
