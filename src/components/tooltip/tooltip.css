@@ -5,7 +5,8 @@
 }
 
 .tooltip{
-  position: fixed;
+  position: absolute;
+  top: 0;
   z-index: 100;
   background-color: white;
   border-radius: 3px;

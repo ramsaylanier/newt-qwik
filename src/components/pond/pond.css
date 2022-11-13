@@ -1,0 +1,48 @@
+.pond-header{
+  background-color: var(--lighter-green);
+}
+
+.pond-title-container{
+  display: flex;
+  align-items: center;
+}
+
+.pond-title{
+  color: var(--dark-purple);
+  margin: 0;
+  padding: 0 2rem 0 0;
+} 
+
+.pond-title-input{
+  color: var(--dark-purple);
+  font-size: 2rem;
+  padding: 0rem;
+  border-bottom: 1px solid var(--light-purple);
+}
+
+.pond-content{
+  grid-area: body;
+  display: flex;
+  flex-flow: column;
+  padding: 2rem;
+}
+
+
+.pond-content .page-list{
+  list-style: none;
+}
+
+.pond-content .page-list-item{
+  background-color: var(--light-purple);
+  padding: .5rem;
+  margin-bottom: 1rem;
+  border-radius: 3px;
+}
+
+.pond-content .page-list-item:hover{
+  background-color: var(--lighter-green); 
+}
+
+.pond-content .page-list-item a{
+  text-decoration: underline;
+}

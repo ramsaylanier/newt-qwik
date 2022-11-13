@@ -16,8 +16,6 @@ const Editor = (props: EditorProps) => {
   const containerRef = useRef<any>();
   const renderedRef = useRef(false);
 
-  console.log(editorRef.current);
-
   const initEditor = () => {
     const editor = new EditorJS({
       // holder: `js-editor-${page._key}`,
@@ -25,7 +23,6 @@ const Editor = (props: EditorProps) => {
       placeholder: "Let`s write an awesome story!",
       data: props.page.content,
       onReady: () => {
-        console.log("ready");
         editorRef.current = editor;
       },
       tools: {

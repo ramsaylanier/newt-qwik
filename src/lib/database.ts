@@ -1,8 +1,7 @@
 import { Database, aql } from "arangojs";
-import type { EdgeCollection } from "arangojs/collection";
 import { literal } from "arangojs/aql";
 import { load } from "cheerio";
-import { updateUserMetadata } from "~/routes/auth/[...auth0]";
+import { updateUserMetadata } from "~/routes/auth/[...auth0]/index:auth";
 
 const host = import.meta.env.VITE_DATABASE_HOST;
 const databaseName = import.meta.env.VITE_DATABASE_NAME;
@@ -186,6 +185,51 @@ export const createPond = async (
   return null;
 };
 
+export const deletePond = async (pondId: string, userId: string) => {
+  if (!userId) return;
+  try {
+    const pondCollection = db.collection("Ponds");
+    const document = await pondCollection.document(pondId);
+
+    if (document) {
+      if (document.ownerId !== userId) {
+        throw Error("You aren't the owner");
+      }
+      // delete pages and edges
+      await db.query(aql`
+      FOR page, edge, path IN 1..1 ANY ${pondId} Graph pondPagesGraph
+        REMOVE edge IN PondEdges
+        REMOVE page in Pages
+      `);
+      pondCollection.remove(document);
+    }
+
+    return pondId;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getPond = async (
+  pondKey: string,
+  userId: string
+): Promise<Pond | null> => {
+  try {
+    const collection = db.collection("Ponds");
+    const pond: Pond = await collection.document(pondKey);
+
+    if (!pond.private || pond.ownerId === userId) {
+      return pond;
+    } else {
+      throw Error("No access");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+
+  return null;
+};
+
 export const getUserPonds = async (userId?: string) => {
   if (userId) {
     try {
@@ -220,23 +264,77 @@ export const getUserPonds = async (userId?: string) => {
   return [];
 };
 
-export const getPagesFromPond = async (pond?: Pond): Promise<Page[]> => {
-  if (pond) {
+export const updatePondTitle = async (id: string, title: string) => {
+  try {
+    const collection = await db.collection("Ponds");
+    console.log({ collection });
+    const document = await collection.document(id);
+    const updatedDoc = await collection.update(document._key, {
+      title,
+      lastEdited: new Date(),
+    });
+    const newDocument = await collection.document(updatedDoc);
+    return newDocument;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getPondEdgesForPage = async (pageKey: string): Promise<Pond[]> => {
+  try {
+    const query = await db.query(aql`
+      FOR page IN Pages
+      FILTER page._key == ${pageKey}
+        FOR pond IN INBOUND page PondEdges
+        RETURN pond 
+    `);
+    const ponds = [];
+    for await (const pond of query) {
+      pond && ponds.push(pond);
+    }
+    return ponds;
+  } catch (err) {
+    console.log(err);
+  }
+
+  return [];
+};
+
+export const getPondEdgesForPond = async (pondKey: string): Promise<Page[]> => {
+  try {
+    const query = await db.query(aql`
+      FOR pond IN Ponds
+      FILTER pond._key == ${pondKey}
+        FOR page IN OUTBOUND pond PondEdges
+        RETURN page 
+    `);
+    const ponds = [];
+    for await (const pond of query) {
+      pond && ponds.push(pond);
+    }
+    return ponds;
+  } catch (err) {
+    console.log(err);
+  }
+
+  return [];
+};
+
+export const getPagesFromPond = async (pondKey?: string): Promise<Page[]> => {
+  if (pondKey) {
     try {
       const pages = [];
       const query = await db.query(aql`
           FOR pond IN Ponds
-          FILTER pond._id == ${pond._id}
+          FILTER pond._key== ${pondKey}
             FOR page IN OUTBOUND pond PondEdges
             RETURN page
         `);
 
       for await (const page of query) {
-        console.log({ page });
-        pages.push(page);
+        page && pages.push(page);
       }
 
-      console.log({ pages });
       return pages;
     } catch (e) {
       console.log(e);
@@ -277,27 +375,24 @@ export const searchPages = async (queryString: string) => {
   }
 };
 
-export const getPage = async (pageKey: string, userId: string) => {
+export const getPage = async (
+  pageKey: string,
+  userId: string
+): Promise<Page | null> => {
   try {
-    console.log({ pageKey, userId });
-    const cursor = await db.query(aql`
-            FOR page IN Pages
-            FILTER page._key == ${pageKey}
-              RETURN page
-          `);
+    const collection = db.collection("Pages");
+    const page: Page = await collection.document(pageKey);
 
-    const result = await cursor.next();
-
-    console.log({ result });
-
-    if (!result.private || result.ownerId === userId) {
-      return result;
+    if (!page.private || page.ownerId === userId) {
+      return page;
     } else {
       throw Error("No access");
     }
   } catch (e) {
     console.log(e);
   }
+
+  return null;
 };
 
 interface PageResult {

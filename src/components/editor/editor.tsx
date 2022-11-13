@@ -6,13 +6,17 @@ import ImageTool from "@editorjs/simple-image";
 import MarkerTool from "@editorjs/marker";
 import LinkAutocomplete from "@editorjs/link-autocomplete";
 
-export default component$(({ page }: PageProps) => {
+interface EditorProps {
+  page: Page;
+}
+
+export default component$(({ page }: EditorProps) => {
   useClientEffect$(() => {
     if (typeof window !== "undefined") {
       const editor = new EditorJS({
         autofocus: true,
         holder: "js-editor-holder",
-        data: page.content,
+        data: page.content || "",
         tools: {
           header: Header,
           list: {

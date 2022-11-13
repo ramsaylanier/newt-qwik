@@ -6,19 +6,17 @@ import Button from "~/components/buttons/button";
 import { Auth0Context } from "~/lib/auth";
 import Popover from "../popover/popover";
 
-interface DeletePageIconProps {
-  page: Page;
+interface DeletePondIconProps {
+  pond: Pond;
 }
 
-interface StateProps {
-  anchorEl: Element | null;
-}
-
-export default component$((props: DeletePageIconProps) => {
-  const state = useStore<StateProps>({
+export default component$((props: DeletePondIconProps) => {
+  const state = useStore({
     anchorEl: null,
   });
+
   const store = useContext(Auth0Context);
+
   const nav = useNavigate();
 
   const handleClick = $((event: any) => {
@@ -30,14 +28,16 @@ export default component$((props: DeletePageIconProps) => {
   });
 
   const handleDelete = $(async () => {
-    const res = await fetch("/page/api/delete", {
+    const res = await fetch("/pond/api/delete", {
       method: "POST",
-      body: JSON.stringify({ pageId: props.page._id }),
+      headers: {
+        accept: "application/json",
+      },
+      body: JSON.stringify({ pondId: props.pond._id }),
     });
 
-    if (res.ok && store.activePond) {
-      store.activePond.pages =
-        store.activePond.pages?.filter((p) => p._id !== props.page._id) || [];
+    if (res.ok) {
+      store.ponds = store.ponds.filter((p) => p._id !== props.pond._id);
       state.anchorEl = null;
       nav.path = "/";
     }
@@ -55,10 +55,12 @@ export default component$((props: DeletePageIconProps) => {
         placement="left"
       >
         <header class="dialog-header">
-          <h3 class="dialog-title">Delete Page</h3>
+          <h3 class="dialog-title">Delete Pond</h3>
         </header>
         <section class="dialog-body">
-          <p>Are You Sure?</p>
+          <p>
+            Are You Sure? This will delete all Pages associated to this Pond.
+          </p>
 
           <Button
             onClick$={handleDelete}

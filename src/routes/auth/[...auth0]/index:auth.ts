@@ -81,7 +81,6 @@ const getProfile = async (token: string) => {
       throw Error(res.statusText);
     } else {
       const profile = await res.json();
-      console.log({ profile });
       return profile;
     }
   } catch (err) {
@@ -125,8 +124,6 @@ export const updateUserMetadata = async (userId: string, metadata: object) => {
       }),
     });
     const result = await res.json();
-
-    console.log({ result });
     return result;
   } catch (err) {
     console.log(err);
@@ -162,10 +159,10 @@ export const onGet: RequestHandler = async ({
         if (tokenData) {
           const profile = await getProfile(tokenData?.access_token);
 
-          cookie.set("newt-user", profile.sub, {
-            domain: "dev.newt",
-            path: "/",
-          });
+          response.headers.set(
+            "Set-Cookie",
+            `newt-user=${profile.sub}; Domain=dev.newt; Path=/;`
+          );
 
           currentUser = profile;
         } else {

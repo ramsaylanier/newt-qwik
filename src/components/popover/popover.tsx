@@ -14,11 +14,8 @@ import styles from "./popover.css?inline";
 import IconButton from "../buttons/icon-button";
 import Icon from "../icons/icon";
 
-// Types
-import type { DOMElement } from "slate-react/dist/utils/dom";
-
 interface PopoverProps {
-  anchorEl?: DOMElement | null;
+  anchorEl?: Element | null;
   onClose$: PropFunction<(event: any) => void>;
   placement: "left" | "right" | "center";
 }

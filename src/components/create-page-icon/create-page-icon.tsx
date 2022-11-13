@@ -5,28 +5,28 @@ import {
   useStyles$,
   useContext,
 } from "@builder.io/qwik";
-import { MUIDialog } from "~/integrations/react/mui";
 import Icon from "~/components/icons/icon";
 import styles from "./create-page-icon.css?inline";
 import IconButton from "~/components/buttons/icon-button";
 import Button from "~/components/buttons/button";
 import { Auth0Context } from "~/lib/auth";
+import Popover from "../popover/popover";
 
 export default component$(() => {
   useStyles$(styles);
   const userStore = useContext(Auth0Context);
 
   const state = useStore({
-    open: false,
+    anchorEl: null,
     title: "",
   });
 
-  const handleClick = $(() => {
-    state.open = true;
+  const handleClick = $((event: any) => {
+    state.anchorEl = event.target;
   });
 
   const handleClose = $(() => {
-    state.open = false;
+    state.anchorEl = null;
     state.title = "";
   });
 
@@ -58,11 +58,13 @@ export default component$(() => {
         <Icon name="add" />
       </IconButton>
 
-      <MUIDialog open={state.open} onClose$={handleClose} client:visible>
-        <header class="dialog-header">
-          <h3 class="dialog-title">Create New Page</h3>
-        </header>
+      <Popover
+        anchorEl={state.anchorEl}
+        onClose$={handleClose}
+        placement="left"
+      >
         <section class="dialog-body">
+          <h5 class="popover-title">Create New Page</h5>
           <form onSubmit$={handleSubmit} preventdefault:submit>
             <input
               type="text"
@@ -83,7 +85,7 @@ export default component$(() => {
             </Button>
           </form>
         </section>
-      </MUIDialog>
+      </Popover>
     </>
   );
 });

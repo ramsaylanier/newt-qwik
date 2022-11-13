@@ -17,7 +17,29 @@ main > aside {
 
 .page{
   position: relative;
-  /* z-index: 5; */
+  height: 100vh;
+  overflow: hidden;
   grid-area: page;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "body"
+  ;
+  grid-template-columns: 1fr;
+  grid-template-rows: var(--header-height) 1fr;
+}  
+
+.page > header{
+  grid-area: header;
+  border-bottom: 3px solid var(--dark-purple);
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  padding: 0 2rem;
+}
+
+.page > header form{
+  display: flex;
+  align-items: center;
 }
 

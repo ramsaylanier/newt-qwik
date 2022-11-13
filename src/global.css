@@ -12,10 +12,11 @@
   --dark-green:#0a670a;
   --light-purple: #e3a2ff;
   --dark-purple: #8b088b;
+  --light-grey: #ebebeb;
 
   --mono-font: Menlo, monospace;
 
-  --header-height: 90px;
+  --header-height: 100px;
 }
 
 *, *:before, *:after {

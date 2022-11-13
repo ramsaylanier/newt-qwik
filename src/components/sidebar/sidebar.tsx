@@ -31,7 +31,6 @@ export default component$(() => {
 
     if (res.ok) {
       const user: UserProfile = await res.json();
-      console.log({ user });
       store.user = user;
     }
   });

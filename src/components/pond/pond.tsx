@@ -5,30 +5,25 @@ import {
   useStore,
   useContext,
 } from "@builder.io/qwik";
-import styles from "./page.css?inline";
+import styles from "./pond.css?inline";
 
 // Components
+import { Link } from "@builder.io/qwik-city";
 import { Auth0Context } from "~/lib/auth";
-import PageLinks from "~/components/page-links/page-links";
-import Editor from "~/components/editor/editor";
-import DeletePageIcon from "~/components/delete-page-icon/delete-page-icon";
+import DeletePondIcon from "~/components/delete-pond-icon/delete-pond-icon";
 import Icon from "../icons/icon";
 import IconButton from "../buttons/icon-button";
-import { Link } from "@builder.io/qwik-city";
+import Table from "~/components/table/table";
 
 // Data
-import { updatePageTitle } from "~/lib/pageConnector";
+import { updatePondTitle } from "~/lib/database";
 
-interface PageProps {
-  page: Page | null;
-}
-
-export default component$(({ page }: PageProps) => {
+export default component$(({ pond }: PondProps) => {
   useStyles$(styles);
   const store = useContext(Auth0Context);
 
   const state = useStore({
-    title: page?.title || "",
+    title: pond?.title || "",
     isEditing: false,
   });
 
@@ -41,35 +36,32 @@ export default component$(({ page }: PageProps) => {
   });
 
   const handleSaveName = $(() => {
-    if (state.title.length > 0 && page) {
-      page.title = state.title;
+    if (state.title.length > 0 && pond) {
+      pond.title = state.title;
       state.isEditing = false;
 
-      const storePage = store.activePond?.pages.find((p) => p._id === page._id);
-      if (storePage) {
-        storePage.title = state.title;
+      if (store.activePond) {
+        store.activePond.title = state.title;
       }
 
-      updatePageTitle(page._id, state.title);
+      updatePondTitle(pond._id, state.title);
     }
   });
 
   const handleCancelEdit = $(() => {
-    if (page) {
-      state.isEditing = false;
-      state.title = page.title;
-    }
+    state.isEditing = false;
+    state.title = pond?.title || "";
   });
 
   return (
     <>
-      <header>
-        <div class="page-title-container">
+      <header class="pond-header">
+        <div class="pond-title-container">
           {state.isEditing ? (
             <>
               <form preventdefault:submit onSubmit$={handleSaveName}>
                 <input
-                  class="page-title-input"
+                  class="pond-title-input"
                   type="text"
                   value={state.title}
                   onChange$={handleChange}
@@ -89,34 +81,48 @@ export default component$(({ page }: PageProps) => {
             </>
           ) : (
             <>
-              <h2 class="page-title">{page?.title}</h2>
-              {page && (
+              <h2 class="pond-title">{pond?.title}</h2>
+
+              {pond && (
                 <>
                   <IconButton onClick$={handleEditName}>
                     <Icon name="edit" />
                   </IconButton>
-                  <DeletePageIcon page={page} />
+
+                  <DeletePondIcon pond={pond} />
                 </>
               )}
             </>
           )}
         </div>
-
-        <div class="pond-links-container">
-          <span style={{ marginRight: ".5rem" }}>in:</span>
-          {page?.ponds?.map((pond) => (
-            <Link href={`/pond/${pond._key}`} class="pond-link">
-              {pond.title}
-            </Link>
-          ))}
-        </div>
       </header>
 
-      <div class="page-content">
-        <section class="page-editor">{page && <Editor page={page} />}</section>
-        <aside class="page-links">
-          <PageLinks page={page} />
-        </aside>
+      <div class="pond-content">
+        <Table
+          data={pond?.pages || []}
+          columns={[
+            {
+              id: "id",
+              hide: true,
+            },
+            {
+              id: "title",
+              heading: "Title",
+              formatData$: $((page: Page) => {
+                return <Link href={`/page/${page._key}`}>{page.title}</Link>;
+              }),
+            },
+            {
+              id: "lastEdited",
+              heading: "Last Edited",
+              formatData$: $((page: Page) => {
+                const date = new Date(page.lastEdited);
+
+                return date.toString();
+              }),
+            },
+          ]}
+        />
       </div>
     </>
   );

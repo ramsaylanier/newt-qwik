@@ -7,14 +7,16 @@ import {
   $,
 } from "@builder.io/qwik";
 import styles from "./pond-select.css?inline";
+import { useNavigate } from "@builder.io/qwik-city";
+
 import { Auth0Context } from "~/lib/auth";
-import { getUserPonds } from "~/lib/database";
 import IconButton from "~/components/buttons/icon-button";
 import Icon from "~/components/icons/icon";
 import Popover from "~/components/popover/popover";
 import Button from "../buttons/button";
 import Tooltip from "../tooltip/tooltip";
 
+import { getUserPonds } from "~/lib/database";
 import { createPond } from "~/lib/database";
 
 export default component$(() => {
@@ -24,6 +26,7 @@ export default component$(() => {
     title: "",
     anchorEl: null,
   });
+  const nav = useNavigate();
 
   // hydrate state with ponds
   useMount$(async () => {
@@ -43,7 +46,10 @@ export default component$(() => {
   const handleSubmit = $(async () => {
     if (store.user?.user_id) {
       const newPond = await createPond(state.title, store.user.user_id);
-      console.log({ newPond });
+      if (newPond) {
+        store.ponds.unshift(newPond);
+        state.title = "";
+      }
     }
   });
 
@@ -61,6 +67,7 @@ export default component$(() => {
 
       if (res.ok) {
         state.anchorEl = null;
+        nav.path = `/pond/${pond._key}`;
       }
     } catch (err) {
       console.log(err);

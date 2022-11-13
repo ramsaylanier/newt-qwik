@@ -19,6 +19,7 @@ interface Pond {
   title: string;
   ownerId: string;
   private: boolean;
+  lastEdited: string;
   pages: Page[];
 }
 
@@ -29,6 +30,8 @@ interface Page {
   content: PageContent;
   ownerId: string;
   private: boolean;
+  lastEdited: string;
+  ponds?: Pond[];
 }
 
 interface PageContent {
@@ -50,6 +53,6 @@ interface LayoutData {
   ponds: Pond[];
 }
 
-interface PageProps {
-  page: Page;
+interface PondProps {
+  pond?: Pond;
 }

@@ -6,7 +6,6 @@ import {
   useStylesScoped$,
   useSignal,
 } from "@builder.io/qwik";
-import { DOMElement } from "slate-react/dist/utils/dom";
 import styles from "./tooltip.css?inline";
 
 interface TooltipProps {
@@ -25,22 +24,21 @@ export default component$(({ title, placement = "top" }: TooltipProps) => {
     show: false,
     timer: null,
   });
-  const tooltipRef = useSignal<DOMElement>();
-  const tooltipHeight = tooltipRef.value?.getBoundingClientRect().height || 0;
-  const containerRef = useSignal<DOMElement>();
+  const tooltipRef = useSignal<Element>();
+  const containerRef = useSignal<Element>();
   const containerHeight =
     containerRef.value?.firstElementChild?.getBoundingClientRect().height || 0;
+  const tooltipHeight = tooltipRef.value?.getBoundingClientRect().height || 0;
 
   const offset = containerRef.value
     ? placement === "top"
-      ? containerHeight
+      ? tooltipHeight
       : placement === "bottom"
-      ? -containerHeight + 10
+      ? -containerHeight - tooltipHeight / 2
       : 0
     : 0;
 
   const handleMouseEnter = $(() => {
-    console.log(title);
     state.timer = window.setTimeout(() => {
       state.show = true;
     }, 350);
@@ -51,8 +49,6 @@ export default component$(({ title, placement = "top" }: TooltipProps) => {
     state.show = false;
     state.timer = null;
   });
-
-  console.log({ offset });
 
   return (
     <span
@@ -66,7 +62,7 @@ export default component$(({ title, placement = "top" }: TooltipProps) => {
         <div
           class="tooltip"
           style={{
-            transform: `translate(0px, ${-offset * 2}px)`,
+            transform: `translate(0px, ${-offset}px)`,
           }}
           ref={tooltipRef}
         >
