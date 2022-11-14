@@ -11,10 +11,12 @@ import IconButton from "~/components/buttons/icon-button";
 import Button from "~/components/buttons/button";
 import { Auth0Context } from "~/lib/auth";
 import Popover from "../popover/popover";
+import { useCreatePage } from "~/hooks/useCreatePage";
 
 export default component$(() => {
   useStyles$(styles);
   const userStore = useContext(Auth0Context);
+  // const { mutation$ } = useCreatePage();
 
   const state = useStore({
     anchorEl: null,
@@ -35,6 +37,7 @@ export default component$(() => {
   });
 
   const handleSubmit = $(async () => {
+    // mutation$({ title: state.title, private: false });
     const res = await fetch(`${window.location.origin}/page/api/create`, {
       method: "POST",
       headers: {
@@ -42,7 +45,6 @@ export default component$(() => {
       },
       body: JSON.stringify({ title: state.title, user: userStore.user }),
     });
-
     if (res.ok && userStore.user) {
       handleClose();
       const newPage = await res.json();

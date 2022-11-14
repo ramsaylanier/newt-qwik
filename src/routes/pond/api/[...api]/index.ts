@@ -16,35 +16,3 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
     }
   }
 };
-
-// export const onGet: RequestHandler = async ({ params, url, cookie }) => {
-// const userCookie = cookie.get("newt-user");
-// const userId = userCookie ? userCookie.value : null;
-
-// if (params.api === "search") {
-//   try {
-//     const query = url.searchParams.get("search");
-
-//     if (query) {
-//       const pages = await searchPages(query);
-//       return pages;
-//     } else {
-//       throw Error("No query!");
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
-// if (params.api === "currentUserPonds") {
-//   console.log({ userId });
-//   try {
-//     if (userId) {
-//       const ponds = await getUserPonds(userId);
-//       return ponds;
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-// };

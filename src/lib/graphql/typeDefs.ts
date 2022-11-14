@@ -36,4 +36,9 @@ export default gql`
     pond(key: String, ownerId: String): Pond
     page(key: String, ownerId: String): Page
   }
+
+  type Mutation {
+    createPond(title: String, private: Boolean): Pond
+    createPage(title: String, private: Boolean): Page
+  }
 `;

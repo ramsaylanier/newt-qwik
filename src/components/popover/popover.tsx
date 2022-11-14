@@ -35,6 +35,7 @@ export default component$(
     });
 
     const containerRef = useSignal<Element>();
+    console.log({ anchorEl });
 
     if (!anchorEl) return null;
 
@@ -57,6 +58,7 @@ export default component$(
 
         state.x = x;
         state.y = anchorRect.y + 20;
+        console.log({ state });
       } else {
         state.x = null;
         state.y = null;

@@ -9,7 +9,7 @@ const contextFunction = defaultContext;
 
 let server: ApolloServer;
 
-export const apolloServer = $(
+const apolloServer = $(
   () =>
     new ApolloServer({
       typeDefs,
@@ -22,7 +22,15 @@ apolloServer().then((r) => {
   server = r;
 });
 
-export const onRequest: RequestHandler = async ({ request, response }) => {
+export const onRequest: RequestHandler = async ({
+  request,
+  response,
+  cookie,
+}) => {
+  if (!server) return null;
+
+  console.log({ cookie });
+
   const formData = await request.formData();
   const body = JSON.parse(Array.from(formData.keys())[0]);
   const headers = new Map<string, string>();
@@ -35,7 +43,9 @@ export const onRequest: RequestHandler = async ({ request, response }) => {
   headers.set("apollo-require-preflight", "false");
 
   const httpGraphQLResponse = await server.executeHTTPGraphQLRequest({
-    context: () => contextFunction(),
+    context: async () => ({
+      user: (await cookie.get("newt-user")?.value) || null,
+    }),
     httpGraphQLRequest: {
       body,
       headers,
@@ -50,15 +60,6 @@ export const onRequest: RequestHandler = async ({ request, response }) => {
 
   response.status = httpGraphQLResponse.status || 200;
   if (httpGraphQLResponse.body.kind === "complete") {
-    console.log("RESPONSE", JSON.parse(httpGraphQLResponse.body.string));
     return JSON.parse(httpGraphQLResponse.body.string);
-  }
-
-  for await (const chunk of httpGraphQLResponse.body.asyncIterator) {
-    console.log({ chunk });
-    // response.write(chunk);
-    if (typeof (response as any).flush === "function") {
-      (response as any).flush();
-    }
   }
 };

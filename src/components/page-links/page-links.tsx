@@ -11,7 +11,7 @@ import { getPageLinks } from "~/lib/database";
 import { load } from "cheerio";
 
 interface Props {
-  page: Page | null;
+  page?: Page | null;
 }
 
 export default component$(({ page }: Props) => {

@@ -17,7 +17,7 @@ import Button from "../buttons/button";
 import Tooltip from "../tooltip/tooltip";
 
 import { getUserPonds } from "~/lib/database";
-import { createPond } from "~/lib/database";
+import { useCreatePond } from "~/hooks/useCreatePond";
 
 export default component$(() => {
   useStylesScoped$(styles);
@@ -27,6 +27,7 @@ export default component$(() => {
     anchorEl: null,
   });
   const nav = useNavigate();
+  const { mutate$ } = useCreatePond();
 
   // hydrate state with ponds
   useMount$(async () => {
@@ -45,7 +46,10 @@ export default component$(() => {
 
   const handleSubmit = $(async () => {
     if (store.user?.user_id) {
-      const newPond = await createPond(state.title, store.user.user_id);
+      // const newPond = await createPond(state.title, store.user.user_id);
+      const newPond = await mutate$({ title: state.title, private: false });
+      console.log({ newPond });
+
       if (newPond) {
         store.ponds.unshift(newPond);
         state.title = "";

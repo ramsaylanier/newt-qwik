@@ -20,7 +20,7 @@ import { Link } from "@builder.io/qwik-city";
 import { updatePageTitle } from "~/lib/pageConnector";
 
 interface PageProps {
-  page: Page | null;
+  page?: Page | null;
 }
 
 export default component$(({ page }: PageProps) => {

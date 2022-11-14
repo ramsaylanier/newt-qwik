@@ -12,30 +12,39 @@ interface EditorProps {
 export default component$(({ page }: EditorProps) => {
   useClientEffect$(async () => {
     if (typeof window !== "undefined") {
-      const EditorJS = (await import("@editorjs/editorjs")).default;
-      const Header = (await import("@editorjs/header")).default;
-      const List = (await import("@editorjs/list")).default;
-      const ImageTool = (await import("@editorjs/simple-image")).default;
-      const MarkerTool = (await import("@editorjs/marker")).default;
-      const LinkAutocomplete = (await import("@editorjs/link-autocomplete"))
-        .default;
+      // const EditorJS = (import("@editorjs/editorjs"));
+      // const Header = (import("@editorjs/header"));
+      // const List = (import("@editorjs/list"));
+      // const ImageTool = (import("@editorjs/simple-image"));
+      // const MarkerTool = import("@editorjs/marker"));
+      // const LinkAutocomplete = (import("@editorjs/link-autocomplete"))
 
-      const editor = new EditorJS({
+      const [EditorJS, Header, List, ImageTool, MarkerTool, LinkAutocomplete] =
+        await Promise.all([
+          import("@editorjs/editorjs"),
+          import("@editorjs/header"),
+          import("@editorjs/list"),
+          import("@editorjs/simple-image"),
+          import("@editorjs/marker"),
+          import("@editorjs/link-autocomplete"),
+        ]);
+
+      const editor = new EditorJS.default({
         autofocus: true,
         holder: "js-editor-holder",
         data: page.content || "",
         tools: {
-          header: Header,
+          header: Header.default,
           list: {
-            class: List,
+            class: List.default,
             inlineToolbar: true,
           },
           image: {
-            class: ImageTool,
+            class: ImageTool.default,
             inlineToolbar: true,
           },
           link: {
-            class: LinkAutocomplete,
+            class: LinkAutocomplete.default,
             inlineToolbar: true,
             config: {
               endpoint: `${window.location.origin}/page/api/search`,
@@ -43,7 +52,7 @@ export default component$(({ page }: EditorProps) => {
             },
           },
           marker: {
-            class: MarkerTool,
+            class: MarkerTool.default,
             shortcut: "CMD+SHIFT+M",
           },
         },

@@ -4,9 +4,12 @@ import {
   getPondEdgesForPage,
   getPondEdgesForPond,
   getUserPonds,
+  createPond,
+  createPage,
 } from "../database";
+import type { IExecutableSchemaDefinition } from "@graphql-tools/schema";
 
-export const resolvers = {
+export const resolvers: IExecutableSchemaDefinition<any>["resolvers"] = {
   Pond: {
     pages: (parent: Page) => {
       return getPondEdgesForPond(parent._key);
@@ -21,14 +24,23 @@ export const resolvers = {
     },
   },
   Query: {
-    ponds(_: Pond, args: any) {
+    ponds(_: Pond, args) {
       return getUserPonds(args.ownerId);
     },
-    pond(_: Pond, args: any) {
+    pond(_: Pond, args) {
       return getPond(args.key, args.ownerId);
     },
-    page(_: Page, args: any) {
+    page(_: Page, args) {
       return getPage(args.key, args.ownerId);
+    },
+  },
+  Mutation: {
+    createPond(_, args, context) {
+      console.log({ args, context });
+      return createPond(args.title, context.user);
+    },
+    createPage(_, args, context) {
+      return createPage(args.title, context.user);
     },
   },
 };
