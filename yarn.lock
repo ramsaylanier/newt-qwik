@@ -1723,7 +1723,7 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-plugin-qwik@^0.13.1:
+eslint-plugin-qwik@^0.13.3:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-qwik/-/eslint-plugin-qwik-0.13.3.tgz#280487fef1d62f46d13d0d81fccdccd4f9fda442"
   integrity sha512-oUmd6FcWcCVMGBEYrqNnzPrLuiV2u+yG0lbgn9sTY1QE1SehJ8TXx7WrGzPecazUDP9p0/q1oKEfUVWnGUu1pg==
