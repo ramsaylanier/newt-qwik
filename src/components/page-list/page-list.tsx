@@ -7,9 +7,6 @@ import { useGetActivePond } from "~/hooks/useGetPond";
 export default component$(() => {
   useStyles$(styles);
   const { pond, loading } = useGetActivePond();
-
-  console.log({ pond });
-
   return (
     <ul class="page-list">
       {loading && <p>Loading...</p>}

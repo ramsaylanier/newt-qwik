@@ -88,7 +88,7 @@ const getProfile = async (token: string) => {
   }
 };
 
-const getUserWithMetadata = async (userId: string) => {
+export const getUserWithMetadata = async (userId: string) => {
   try {
     const tokenData = await getManagementToken();
     const res = await fetch(`https://${domain}/api/v2/users/${userId}`, {

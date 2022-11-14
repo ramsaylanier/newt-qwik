@@ -8,8 +8,19 @@ import {
   createPage,
 } from "../database";
 import type { IExecutableSchemaDefinition } from "@graphql-tools/schema";
+import { getUserWithMetadata } from "~/routes/auth/[...auth0]/index:auth";
 
 export const resolvers: IExecutableSchemaDefinition<any>["resolvers"] = {
+  User: {
+    ponds: (parent: UserProfile) => {
+      return getUserPonds(parent.user_id);
+    },
+    activePond: (parent: UserProfile, args, context) => {
+      if (parent.user_metadata.activePond) {
+        return getPond(parent.user_metadata?.activePond, context.user);
+      }
+    },
+  },
   Pond: {
     pages: (parent: Page) => {
       return getPondEdgesForPond(parent._key);
@@ -24,6 +35,9 @@ export const resolvers: IExecutableSchemaDefinition<any>["resolvers"] = {
     },
   },
   Query: {
+    currentUser(_: UserProfile, args, context) {
+      return getUserWithMetadata(context.user);
+    },
     ponds(_: Pond, args) {
       return getUserPonds(args.ownerId);
     },

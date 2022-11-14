@@ -3,9 +3,15 @@ import { gql } from "graphql-tag";
 export default gql`
   scalar GenericScalar
 
+  type UserMetadata {
+    activePond: String
+  }
+
   type User {
     user_id: String
+    user_metadata: UserMetadata
     ponds: [Pond]
+    activePond: Pond
   }
 
   type Pond {
@@ -32,6 +38,8 @@ export default gql`
   }
 
   type Query {
+    user(id: String): User
+    currentUser: User
     ponds(ownerId: String): [Pond]
     pond(key: String, ownerId: String): Pond
     page(key: String, ownerId: String): Page

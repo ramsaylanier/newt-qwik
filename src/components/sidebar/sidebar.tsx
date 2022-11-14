@@ -1,10 +1,4 @@
-import {
-  component$,
-  useStyles$,
-  $,
-  useContext,
-  useClientEffect$,
-} from "@builder.io/qwik";
+import { component$, useStyles$, $, useContext } from "@builder.io/qwik";
 import styles from "./sidebar.css?inline";
 import auth0Client from "~/lib/authClient";
 import PageList from "~/components/page-list/page-list";
@@ -14,26 +8,12 @@ import IconButton from "~/components/buttons/icon-button";
 import Button from "~/components/buttons/button";
 import PondSelect from "~/components/pond-select/pond-select";
 import { Auth0Context } from "~/lib/auth";
+import { useCurrentUser } from "~/hooks/useCurrentUser";
 
 export default component$(() => {
   useStyles$(styles);
+  useCurrentUser();
   const store = useContext(Auth0Context);
-
-  // check for auth cookie
-  useClientEffect$(async () => {
-    const res = await fetch(`${window.location.origin}/auth/me`, {
-      method: "GET",
-      headers: {
-        responseType: "application/json",
-      },
-      credentials: "include",
-    });
-
-    if (res.ok) {
-      const user: UserProfile = await res.json();
-      store.user = user;
-    }
-  });
 
   const handleClick = $(async () => {
     if (store.user) {
