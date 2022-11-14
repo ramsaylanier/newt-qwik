@@ -267,7 +267,6 @@ export const getUserPonds = async (userId?: string) => {
 export const updatePondTitle = async (id: string, title: string) => {
   try {
     const collection = await db.collection("Ponds");
-    console.log({ collection });
     const document = await collection.document(id);
     const updatedDoc = await collection.update(document._key, {
       title,

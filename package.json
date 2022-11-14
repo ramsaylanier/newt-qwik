@@ -18,7 +18,8 @@
     "preview": "qwik build preview && vite preview --open",
     "serve": "echo 'Run \"npm run qwik add\" to install a server adaptor'",
     "start": "vite --open --mode ssr",
-    "qwik": "qwik"
+    "qwik": "qwik",
+    "link.dist": "npm link @builder.io/qwik @builder.io/qwik-city @builder.io/qwik-react eslint-plugin-qwik"
   },
   "devDependencies": {
     "@builder.io/qwik": "^0.13.3",

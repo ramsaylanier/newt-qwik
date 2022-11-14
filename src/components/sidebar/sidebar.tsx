@@ -78,7 +78,7 @@ export default component$(() => {
           <nav class="sidebar-nav">
             <div class="nav-inner">
               <PondSelect />
-              <PageList />
+              {store.activePond && <PageList />}
             </div>
           </nav>
         )}

@@ -9,7 +9,6 @@ import {
 export const resolvers = {
   Pond: {
     pages: (parent: Page) => {
-      console.log({ parent });
       return getPondEdgesForPond(parent._key);
     },
   },

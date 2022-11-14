@@ -95,6 +95,7 @@ export default component$(({ pond }: PondProps) => {
             </>
           )}
         </div>
+        <Link href="/ponds">Ponds</Link>
       </header>
 
       <div class="pond-content">

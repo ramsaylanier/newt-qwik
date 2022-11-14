@@ -9,7 +9,7 @@ import { RouterHead } from "./components/router-head/router-head";
 import globalStyles from "./global.css?inline";
 import "normalize.css";
 import "./typeplate.css";
-// import { Auth0Provider } from "~/lib/auth";
+import { Auth0Provider } from "~/lib/auth";
 import SVGIconSymbols from "./components/icons/iconSymbols";
 
 export default component$(() => {
@@ -30,9 +30,9 @@ export default component$(() => {
       </head>
       <body lang="en">
         <SVGIconSymbols />
-        {/* <Auth0Provider> */}
-        <RouterOutlet />
-        {/* </Auth0Provider> */}
+        <Auth0Provider>
+          <RouterOutlet q:slot="children" />
+        </Auth0Provider>
         <ServiceWorkerRegister />
       </body>
     </QwikCity>

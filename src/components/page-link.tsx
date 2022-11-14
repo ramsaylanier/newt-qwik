@@ -11,7 +11,7 @@ interface PageLinkProps {
 export default component$(({ page, style }: PageLinkProps) => {
   return (
     <Tooltip title={page.title}>
-      <Link prefetch={true} href={`/page/${page._key}`} style={style}>
+      <Link href={`/page/${page._key}`} style={style}>
         {page.title}
       </Link>
     </Tooltip>

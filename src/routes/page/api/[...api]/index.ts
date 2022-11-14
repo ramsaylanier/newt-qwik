@@ -11,7 +11,6 @@ import {
 } from "~/lib/database";
 
 export const onPost: RequestHandler = async ({ params, request, cookie }) => {
-  console.log({ params });
   const userCookie = cookie.get("newt-user");
   const userId = userCookie ? userCookie.value : null;
 
@@ -36,9 +35,6 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
     try {
       const { title, user } = await request.json();
       const newPage = await createPage(title, user);
-
-      console.log({ newPage });
-
       return newPage;
     } catch (err) {
       console.log(err);
@@ -48,7 +44,6 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
   if (params.api === "delete") {
     try {
       const { pageId } = await request.json();
-      console.log({ pageId });
       return await deletePage(pageId, userId);
     } catch (err) {
       console.log(err);
@@ -86,7 +81,6 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
   if (params.api === "links") {
     try {
       const { page } = await request.json();
-      console.log({ page });
       const links = await getPageLinks(page);
       return links;
     } catch (err) {
@@ -98,8 +92,6 @@ export const onPost: RequestHandler = async ({ params, request, cookie }) => {
 export const onGet: RequestHandler = async ({ params, url, cookie }) => {
   const userCookie = cookie.get("newt-user");
   const userId = userCookie ? userCookie.value : null;
-
-  console.log({ userCookie, userId });
 
   if (params.api === "search") {
     try {
@@ -117,7 +109,6 @@ export const onGet: RequestHandler = async ({ params, url, cookie }) => {
   }
 
   if (params.api === "currentUserPonds") {
-    console.log({ userId });
     try {
       if (userId) {
         const ponds = await getUserPonds(userId);
